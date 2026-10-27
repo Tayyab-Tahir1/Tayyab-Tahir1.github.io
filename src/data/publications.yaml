@@ -1,0 +1,81 @@
+# Publications. Add a new paper by copying one entry block.
+# My name is written "T. Tahir" in authors and is shown in bold automatically.
+# Fields: authors, title, venue, details (volume, pages, article no.), year, doi (without https://doi.org/).
+
+contributionNote: >-
+  My part in journal articles 1 to 3 and conference papers 6 and 7: the deep-RL and control layer,
+  the EV battery model, battery-limit penalties in the reward, training on a computing cluster, and the
+  methodology sections and reviewer responses. Journal article 4: the Simulink plant model, PSO tuning and
+  the ANN.
+
+journal:
+  - authors: M. Irfan, T. Tahir, S. Deilami, S. Huang, B. P. Veettil
+    title: Novel artificial intelligence driven model-based control framework for solar-electric vehicle home energy optimization
+    venue: Engineering Applications of Artificial Intelligence
+    details: vol. 177, art. no. 114868
+    year: 2026
+    doi: 10.1016/j.engappai.2026.114868
+  - authors: M. Irfan, T. Tahir, S. Deilami, S. Huang, B. P. Veettil
+    title: Novel control-based design optimization of smart energy distribution and management in vehicle-to-grid integrated microgrid
+    venue: Applied Energy
+    details: vol. 402, art. no. 127047
+    year: 2026
+    doi: 10.1016/j.apenergy.2025.127047
+  - authors: M. Irfan, T. Tahir, S. Huang, S. Deilami, B. P. Veettil
+    title: "Optimizing residential energy costs: A novel machine learning approach for solar PV and EV integration through heuristic price signal dispatch"
+    venue: IEEE Transactions on Industry Applications
+    details: vol. 61, no. 3, pp. 4684-4694
+    year: 2025
+    doi: 10.1109/TIA.2025.3537072
+  - authors: M. Irfan, S. Deilami, S. Huang, T. Tahir, B. P. Veettil
+    title: "Optimizing load frequency control in microgrid with vehicle-to-grid integration in Australia: Based on an enhanced control approach"
+    venue: Applied Energy
+    details: vol. 366, art. no. 123317
+    year: 2024
+    doi: 10.1016/j.apenergy.2024.123317
+  - authors: T. Tahir, A. Khalid, J. Arshad, A. Haider, I. Rasheed, A. U. Rehman, S. Hussen
+    title: Implementation of an IoT-based solar-powered smart lawn mower
+    venue: Wireless Communications and Mobile Computing
+    details: vol. 2022, no. 1, art. no. 1971902
+    year: 2022
+    doi: 10.1155/2022/1971902
+
+conference:
+  - authors: M. Irfan, T. Tahir, S. Deilami, S. Huang, B. P. Veettil
+    title: "A novel predictive strategy for daily energy cost reduction in solar 'PV + EV' system with V2G and V2H modes"
+    venue: Proc. IEEE International Conference on Energy Technologies for Future Grids (ETFG)
+    details: pp. 1-6
+    year: 2025
+    doi: 10.1109/ETFG61999.2025.11401228
+  - authors: M. Irfan, T. Tahir, S. Deilami, S. Huang, B. P. Veettil
+    title: A novel data-driven optimization for cost-effective home energy management with PV-EV integration
+    venue: Proc. IEEE 34th Australasian Universities Power Engineering Conference (AUPEC)
+    details: pp. 1-6
+    year: 2024
+    doi: 10.1109/AUPEC62273.2024.10807596
+  - authors: Z. M. Tahir, T. Tahir, T. Arfan, A. Asim, M. Fahad, S. Rauf
+    title: Design and implementation of prepaid energy meter with home automation and peak load management using Android application
+    venue: Engineering Proceedings (IEEC 2023)
+    details: vol. 46, no. 1, art. no. 23
+    year: 2023
+    doi: 10.3390/engproc2023046023
+  - authors: A. Khalid, T. Tahir, A. Haider, N. M. Ahmed, M. Hamid, S. Attari
+    title: Autonomous vehicle based on lane detection through computer vision using Raspberry Pi
+    venue: Proc. International Conference on IT and Industrial Technologies (ICIT)
+    details: pp. 1-7
+    year: 2022
+    doi: 10.1109/ICIT56493.2022.9989134
+
+inPreparation:
+  - title: Uncertainty-aware transformer for rover wheel-slip estimation from multi-rate proprioceptive streams under scarce labels and sensor loss
+    note: TalTech Centre for Biorobotics. For submission to Engineering Applications of Artificial Intelligence.
+    project: gcast
+
+thesis:
+  - authors: T. Tahir
+    title: "Modeling and control of smart integrated port energy systems: A data-driven approach"
+    venue: MSc thesis, Department of Marine Technology, NTNU, Trondheim
+    year: 2025
+    note: "Supervisor: Prof. Mehdi Zadeh."
+    project: port-energy
+    code: https://github.com/Tayyab-Tahir1/Modeling-and-Control-of-Smart-Integrated-Port-Energy-Systems-A-Data-Driven-Approach

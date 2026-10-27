@@ -1,0 +1,328 @@
+/* Design tokens. Proposal in docs/codex-design.md; contrast ratios checked there (AA for all text pairs). */
+:root {
+  --bg: #f6f5f2;
+  --surface: #ffffff;
+  --text: #202b29;
+  --muted: #58635f;
+  --rule: #ccd3ce;
+  --rule-strong: #202b29;
+  --accent: #24695f;
+  --accent-soft: #e3ece8;
+  --on-accent: #f6f5f2;
+  --focus: #24695f;
+  --plate: #ffffff;
+  --plate-edge: #dfe4e0;
+  --hero-edge: transparent;
+
+  --font-display: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  --font-body: 'Public Sans Variable', 'Helvetica Neue', Arial, sans-serif;
+
+  --type-display: clamp(2.5rem, 1.7rem + 3.4vw, 4.75rem);
+  --type-title: clamp(2.125rem, 1.7rem + 2vw, 3.5rem);
+  --type-section: clamp(1.625rem, 1.4rem + 1.1vw, 2.25rem);
+  --type-project: clamp(1.25rem, 1.12rem + 0.6vw, 1.625rem);
+  --type-lead: clamp(1.125rem, 1rem + 0.55vw, 1.4rem);
+  --type-body: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  --type-meta: 0.9rem;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-section: clamp(3rem, 2rem + 4vw, 5rem);
+
+  --page-max: 75rem;
+  --gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
+  --radius: 4px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #151c1a;
+    --surface: #1e2825;
+    --text: #edf1ec;
+    --muted: #b1beb7;
+    --rule: #46544d;
+    --rule-strong: #edf1ec;
+    --accent: #87c9b9;
+    --accent-soft: #23332e;
+    --on-accent: #151c1a;
+    --focus: #87c9b9;
+    --plate: #ffffff;
+    --plate-edge: #2c3833;
+    --hero-edge: #2c3833;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #151c1a;
+  --surface: #1e2825;
+  --text: #edf1ec;
+  --muted: #b1beb7;
+  --rule: #46544d;
+  --rule-strong: #edf1ec;
+  --accent: #87c9b9;
+  --accent-soft: #23332e;
+  --on-accent: #151c1a;
+  --focus: #87c9b9;
+  --plate: #ffffff;
+  --plate-edge: #2c3833;
+  --hero-edge: #2c3833;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  font-variant-numeric: lining-nums;
+  overflow-wrap: break-word;
+}
+
+img,
+svg,
+video,
+iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.12;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--type-title);
+  letter-spacing: -0.015em;
+}
+
+h2 {
+  font-size: var(--type-section);
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: var(--type-project);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 var(--space-3);
+  max-width: 64ch;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color 140ms var(--ease), text-decoration-color 140ms var(--ease);
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+ul {
+  padding-left: 1.1rem;
+}
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--page-max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 20;
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+}
+
+.skip-link:focus {
+  top: var(--space-2);
+}
+
+/* Buttons and text links used as calls to action. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-height: 44px;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.975rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 140ms var(--ease), color 140ms var(--ease), transform 120ms var(--ease);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn-primary:hover {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+}
+
+.link-row a:not(.btn) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 500;
+}
+
+/* Section heading with a full-width top rule: the main structural device of the site. */
+.section {
+  padding-block: var(--space-section) 0;
+}
+
+.section-head {
+  border-top: 2px solid var(--rule-strong);
+  padding-top: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+/* Page header shared by the inner pages. */
+.page-head {
+  padding-block: clamp(1.5rem, 1rem + 2.5vw, 3.5rem) var(--space-5);
+  border-bottom: 2px solid var(--rule-strong);
+  margin-bottom: var(--space-5);
+}
+
+.page-head h1 {
+  margin-bottom: var(--space-3);
+}
+
+.page-head .lead {
+  font-size: var(--type-lead);
+  line-height: 1.4;
+  color: var(--muted);
+  max-width: 48ch;
+  margin: 0;
+}
+
+/* Figure plates: scientific graphics keep their white background in both themes. */
+.plate {
+  background: var(--plate);
+  border: 1px solid var(--plate-edge);
+  padding: clamp(0.75rem, 0.4rem + 1.4vw, 1.5rem);
+}
+
+.plate-flush {
+  padding: 0;
+}
+
+.plate img {
+  width: 100%;
+  height: auto;
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--type-meta);
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+figcaption b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

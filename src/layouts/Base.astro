@@ -1,0 +1,257 @@
+---
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/public-sans/index.css';
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import { profile } from '../lib/data';
+import ogSource from '../assets/hero/hero-microgrid-3d.png';
+
+interface Props {
+  title?: string;
+  description?: string;
+  current?: 'work' | 'publications' | 'cv' | 'about';
+}
+
+const { title, description = profile.tagline, current } = Astro.props;
+const pageTitle = title ? `${title} | ${profile.name}` : `${profile.name}: research`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = await getImage({ src: ogSource, width: 1200, format: 'jpg' });
+const ogUrl = new URL(og.src, Astro.site);
+
+const nav = [
+  { key: 'work', label: 'Work', href: '/#work' },
+  { key: 'publications', label: 'Publications', href: '/publications/' },
+  { key: 'cv', label: 'CV', href: '/cv/' },
+  { key: 'about', label: 'About', href: '/about/' },
+] as const;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151c1a" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+        } catch (e) {
+          /* storage blocked: follow the system theme */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/">{profile.name}</a>
+        <nav aria-label="Main">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch colour theme">
+          <span data-theme-label>Theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <div>
+          <p class="footer-name">{profile.name}</p>
+          <p class="muted">{profile.role}, {profile.affiliation}. {profile.location}.</p>
+        </div>
+        <ul class="footer-links" aria-label="Contact and profiles">
+          <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
+          <li><a href={profile.links.scholar}>Google Scholar</a></li>
+          <li><a href={profile.links.github}>GitHub</a></li>
+          <li><a href={profile.links.orcid}>ORCID</a></li>
+          <li><a href={profile.links.linkedin}>LinkedIn</a></li>
+        </ul>
+        <p class="muted footer-updated">Last updated {profile.updated}.</p>
+      </div>
+    </footer>
+
+    <script>
+      const root = document.documentElement;
+      const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+      const label = document.querySelector<HTMLElement>('[data-theme-label]');
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+      const effective = () =>
+        root.dataset.theme === 'dark' || root.dataset.theme === 'light'
+          ? root.dataset.theme
+          : media.matches
+            ? 'dark'
+            : 'light';
+
+      const render = () => {
+        const next = effective() === 'dark' ? 'light' : 'dark';
+        if (label) label.textContent = next === 'dark' ? 'Dark' : 'Light';
+        button?.setAttribute('aria-label', `Switch to ${next} theme`);
+      };
+
+      button?.addEventListener('click', () => {
+        const next = effective() === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch {
+          /* storage blocked: the choice lasts for this page view only */
+        }
+        render();
+      });
+      media.addEventListener('change', render);
+      render();
+    </script>
+
+    <style>
+      .site-header {
+        border-bottom: 1px solid var(--rule);
+        background: var(--bg);
+      }
+      .header-inner {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+        min-height: 4.5rem;
+      }
+      .brand {
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        font-weight: 500;
+        color: var(--text);
+        text-decoration: none;
+        letter-spacing: -0.01em;
+        margin-right: auto;
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+      }
+      nav ul {
+        display: flex;
+        gap: var(--space-1) var(--space-4);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.975rem;
+        border-bottom: 2px solid transparent;
+      }
+      nav a:hover {
+        color: var(--accent);
+      }
+      nav a[aria-current='page'] {
+        border-bottom-color: var(--accent);
+      }
+      .theme-toggle {
+        min-height: 44px;
+        min-width: 4.5rem;
+        padding: 0 0.85rem;
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text);
+        background: transparent;
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: border-color 140ms var(--ease), color 140ms var(--ease);
+      }
+      .theme-toggle:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      main:focus {
+        outline: none;
+      }
+      .site-footer {
+        margin-top: var(--space-section);
+        border-top: 1px solid var(--rule);
+        padding-block: var(--space-5) var(--space-6);
+        font-size: var(--type-meta);
+      }
+      .footer-inner {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: var(--space-3) var(--space-5);
+        align-items: start;
+      }
+      .footer-name {
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+        margin-bottom: var(--space-1);
+      }
+      .footer-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 var(--space-4);
+      }
+      .footer-links a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+      }
+      .footer-updated {
+        grid-column: 1 / -1;
+        margin: 0;
+      }
+      @media (max-width: 47.99rem) {
+        .header-inner {
+          flex-wrap: wrap;
+          gap: 0 var(--space-3);
+          padding-block: var(--space-2);
+        }
+        nav {
+          order: 3;
+          width: 100%;
+        }
+        nav ul {
+          justify-content: space-between;
+          gap: var(--space-3);
+        }
+        .footer-inner {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </body>
+</html>

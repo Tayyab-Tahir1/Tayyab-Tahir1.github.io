@@ -1,0 +1,190 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { profile, badgeImage } from '../lib/data';
+---
+
+<Base title="About" description={profile.intro} current="about">
+  <div class="wrap">
+    <header class="page-head">
+      <h1>About</h1>
+      <p class="lead">{profile.intro}</p>
+    </header>
+
+    <div class="about-grid">
+      <div class="bio">
+        {profile.bio.map((para) => <p>{para}</p>)}
+
+        <section aria-labelledby="int-title" class="about-section">
+          <h2 id="int-title">Research interests</h2>
+          <ul class="interests">
+            {profile.interests.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="edu-title" class="about-section">
+          <h2 id="edu-title">Education</h2>
+          <ul class="entries">
+            {
+              profile.education.map((e) => (
+                <li>
+                  <p class="entry-title">{e.degree}</p>
+                  <p class="muted">
+                    {e.institution}, {e.place}. <span class="tnum">{e.dates}</span>.
+                  </p>
+                  {e.detail && <p class="muted">{e.detail}</p>}
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="cert-title" class="about-section">
+          <h2 id="cert-title">Certifications</h2>
+          <ul class="certs">
+            {
+              profile.certifications.map((c) => (
+                <li>
+                  <Image src={badgeImage(c.badge)} alt="" width={48} height={48} class="badge" />
+                  <div>
+                    <p class="entry-title">{c.name}</p>
+                    <p class="muted">
+                      {c.issuer}, {c.date}.{' '}
+                      {c.url && <a href={c.url}>Credly badge</a>}
+                    </p>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="awards-title" class="about-section">
+          <h2 id="awards-title">Honours and languages</h2>
+          <ul class="plain-list">
+            {profile.awards.map((a) => <li>{a}</li>)}
+            {profile.languages.map((l) => <li>{l}</li>)}
+          </ul>
+        </section>
+      </div>
+
+      <aside class="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">Contact</h2>
+        <p><a class="email" href={`mailto:${profile.email}`}>{profile.email}</a></p>
+        <p class="muted">{profile.location}</p>
+        <p class="muted">References available on request.</p>
+        <ul class="contact-links">
+          <li><a href={profile.links.scholar}>Google Scholar</a></li>
+          <li><a href={profile.links.orcid}>ORCID</a></li>
+          <li><a href={profile.links.github}>GitHub</a></li>
+          <li><a href={profile.links.linkedin}>LinkedIn</a></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .about-section {
+    margin-top: var(--space-6);
+  }
+  .about-section h2,
+  .contact h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-3);
+  }
+  .interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .interests li {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 0.3rem 0.7rem;
+    font-size: var(--type-meta);
+  }
+  .entries,
+  .certs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .entries li,
+  .certs li {
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .entries p,
+  .certs p {
+    margin-bottom: var(--space-1);
+  }
+  .entries p.muted,
+  .certs p.muted {
+    font-size: var(--type-meta);
+  }
+  .entry-title {
+    font-weight: 600;
+  }
+  .certs li {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: center;
+  }
+  .certs :global(.badge) {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    background: var(--plate);
+    border: 1px solid var(--plate-edge);
+    border-radius: var(--radius);
+    padding: 4px;
+  }
+  .plain-list {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+  .plain-list li {
+    margin-bottom: var(--space-2);
+  }
+  .contact {
+    position: sticky;
+    top: var(--space-4);
+    border-top: 2px solid var(--rule-strong);
+    padding-top: var(--space-3);
+  }
+  .email {
+    font-weight: 600;
+    word-break: break-all;
+  }
+  .contact-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .contact-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  @media (max-width: 63.99rem) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+    .contact {
+      position: static;
+    }
+  }
+</style>

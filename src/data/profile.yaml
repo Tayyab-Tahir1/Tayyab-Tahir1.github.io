@@ -1,0 +1,119 @@
+# Site-wide facts about me. Edit text here; pages read it at build time.
+name: Tayyab Tahir
+tagline: Reinforcement learning, predictive control and trustworthy AI for energy systems and field robots.
+role: Early Stage Researcher
+affiliation: TalTech, Centre for Biorobotics
+affiliationNote: Horizon Europe project
+location: Tallinn, Estonia
+email: e.tayyab1024@gmail.com
+updated: October 2026
+
+# Short intro used on the home page and the about page.
+intro: >-
+  I am an electrical engineer working on learning-based control for energy systems under uncertainty
+  and for field robots. I build the simulators, compare deep RL with model predictive control and
+  rule-based baselines, and report where the learned controllers fail.
+
+bio:
+  - >-
+    My energy work covers microgrids with hydrogen storage, vehicle-to-grid and virtual power plants.
+    For my MSc thesis at NTNU I modelled a port microgrid and compared DQN, PPO, MPC and an LSTM trained
+    to imitate MPC. Before that I co-authored papers on deep-RL energy management for homes and V2G
+    microgrids and on load frequency control, two of them in Applied Energy.
+  - >-
+    At TalTech I work on trustworthy AI for field robots. I lead the development of GCAST, a transformer
+    that estimates rover wheel slip and gives each estimate a prediction interval that we check for
+    coverage. A deep-RL traction and locomotion controller for the project rovers is in progress.
+  - >-
+    Earlier I was a lab engineer at the UMT Smart Power Systems Lab, where I worked on PV and battery
+    energy management with hardware-in-the-loop tests, and a solar PV design and commissioning engineer.
+
+interests:
+  - Multi-agent RL for distributed energy resources
+  - Learning-based MPC
+  - Trustworthy and safe RL
+  - Sim-to-real robot locomotion
+
+metrics:
+  papers: 9
+  journal: 5
+  conference: 4
+  citations: 168
+  hIndex: 6
+  i10Index: 4
+  checked: October 2026
+
+links:
+  cv: /cv/Tayyab_Tahir_CV.pdf
+  publicationList: /cv/Tayyab_Tahir_Publications.pdf
+  scholar: https://scholar.google.com/citations?user=nQ7pkQ4AAAAJ
+  github: https://github.com/Tayyab-Tahir1
+  orcid: https://orcid.org/0000-0003-2378-5704
+  linkedin: https://www.linkedin.com/in/tayyab-tahir-99ab74162/
+
+education:
+  - degree: MSc Marine Robotics (Erasmus Mundus MIR), Electrical, Computer and Control Engineering
+    institution: Norwegian University of Science and Technology (NTNU)
+    place: Trondheim, Norway
+    dates: 2024-2025
+    detail: "Grade A. Thesis: Modeling and Control of Smart Integrated Port Energy Systems: A Data-Driven Approach."
+  - degree: MSc Engineering of Complex Systems (Erasmus Mundus MIR)
+    institution: Université de Toulon
+    place: La Garde, France
+    dates: 2023-2024
+    detail: Grade 15.2/20. Erasmus Mundus Joint Master in Marine and Maritime Intelligent Robotics, full scholarship.
+  - degree: BS Electrical Engineering
+    institution: University of Management and Technology (UMT)
+    place: Lahore, Pakistan
+    dates: 2016-2020
+    detail: GPA 3.96/4.00, Gold Medalist.
+
+experience:
+  - role: Early Stage Researcher, Horizon Europe project
+    org: TalTech, Centre for Biorobotics
+    place: Tallinn, Estonia
+    dates: Dec 2025 to present
+  - role: MSc thesis researcher, smart port energy systems
+    org: NTNU, Department of Marine Technology
+    place: Trondheim, Norway
+    dates: Jan-Jun 2025
+  - role: Teaching assistant, Marine Electric and Hybrid Power and Propulsion Systems
+    org: NTNU, Department of Marine Technology
+    place: Trondheim, Norway
+    dates: Jan-Jun 2025
+  - role: AI engineering intern
+    org: EXAIL (formerly ECA Group)
+    place: La Garde, France
+    dates: Jun-Aug 2024
+  - role: Lab engineer
+    org: UMT, Smart Power Systems Lab
+    place: Sialkot, Pakistan
+    dates: 2021-2023
+  - role: Solar PV design and commissioning engineer
+    org: Thunder Solar Solution
+    place: Sialkot, Pakistan
+    dates: 2020-2021
+
+# badge: file name inside src/assets/badges/
+certifications:
+  - name: NASA Open Science 101
+    issuer: NASA Science Mission Directorate
+    date: Aug 2026
+    badge: nasa-open-science-101.png
+    url: https://www.credly.com/badges/1bafd295-ea26-4817-93be-6c52ab6f256d/public_url
+  - name: Building with the Claude API
+    issuer: Anthropic Academy
+    date: Apr 2026
+    badge: anthropic.png
+  - name: Introduction to Model Context Protocol
+    issuer: Anthropic Academy
+    date: Aug 2026
+    badge: anthropic.png
+
+awards:
+  - Gold Medalist, BS Electrical Engineering, UMT; Rector Scholarship and five Rector Awards, 2016-2020.
+  - NGIRI National Award 2020 (Ministry of IT and Telecom, Pakistan) for a nationally funded final-year project.
+
+languages:
+  - "English: PTE Academic 70 (Aug 2026, valid to Aug 2028)"
+  - "Urdu: native"

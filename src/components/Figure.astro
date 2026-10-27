@@ -1,0 +1,54 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  caption: string;
+  alt?: string;
+  number?: number;
+  plate?: boolean;
+  eager?: boolean;
+  sizes?: string;
+}
+
+const {
+  src,
+  caption,
+  alt = caption,
+  number,
+  plate = true,
+  eager = false,
+  sizes = '(min-width: 64rem) 52rem, 100vw',
+} = Astro.props;
+
+// Full-size link so dense plots stay readable when opened on their own.
+const full = await getImage({ src, width: Math.min(src.width, 2200), format: 'webp' });
+---
+
+<figure class="fig">
+  <a class:list={['plate', { 'plate-flush': !plate }]} href={full.src} aria-label={`Open full-size image: ${alt}`}>
+    <Image
+      src={src}
+      alt={alt}
+      widths={[480, 800, 1200, 1600].filter((w) => w <= src.width)}
+      sizes={sizes}
+      format="webp"
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+    />
+  </a>
+  <figcaption>
+    {number !== undefined && <b>Figure {number}.</b>} {caption}
+  </figcaption>
+</figure>
+
+<style>
+  .fig a {
+    display: block;
+    transition: border-color 140ms var(--ease);
+  }
+  .fig a:hover {
+    border-color: var(--accent);
+  }
+</style>

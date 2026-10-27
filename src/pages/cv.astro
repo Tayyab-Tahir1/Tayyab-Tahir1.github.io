@@ -1,0 +1,159 @@
+---
+import { statSync } from 'node:fs';
+import { join } from 'node:path';
+import Base from '../layouts/Base.astro';
+import { profile } from '../lib/data';
+
+function sizeOf(publicPath: string): string {
+  try {
+    const bytes = statSync(join(process.cwd(), 'public', publicPath)).size;
+    return `${Math.round(bytes / 1024)} KB`;
+  } catch {
+    throw new Error(`CV file missing: public${publicPath}. See README, "Replace the CV".`);
+  }
+}
+
+const cvSize = sizeOf(profile.links.cv);
+const listSize = sizeOf(profile.links.publicationList);
+---
+
+<Base title="CV" description={`Curriculum vitae of ${profile.name}.`} current="cv">
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Curriculum vitae</h1>
+      <p class="lead">My two-page research CV. The PDF is the full version; experience and education are summarised below.</p>
+    </header>
+
+    <div class="cv-grid">
+      <aside class="rail" aria-label="Downloads">
+        <a class="btn btn-primary" href={profile.links.cv} download="Tayyab_Tahir_CV.pdf">Download CV</a>
+        <p class="muted small">PDF, {cvSize}. Updated {profile.updated}.</p>
+        <p class="small"><a href={profile.links.publicationList}>Publication list (PDF, {listSize})</a></p>
+      </aside>
+
+      <div class="cv-main">
+        <section aria-labelledby="exp-title" class="cv-section">
+          <h2 id="exp-title">Experience</h2>
+          <ul class="timeline">
+            {
+              profile.experience.map((e) => (
+                <li>
+                  <span class="when tnum">{e.dates}</span>
+                  <span>
+                    <strong>{e.role}</strong>
+                    <span class="muted">
+                      {' '}
+                      {e.org}, {e.place}
+                    </span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="edu-title" class="cv-section">
+          <h2 id="edu-title">Education</h2>
+          <ul class="timeline">
+            {
+              profile.education.map((e) => (
+                <li>
+                  <span class="when tnum">{e.dates}</span>
+                  <span>
+                    <strong>{e.degree}</strong>
+                    <span class="muted">
+                      {' '}
+                      {e.institution}, {e.place}
+                    </span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="pdf-title" class="cv-section pdf-section">
+          <h2 id="pdf-title">Full CV</h2>
+          <object class="pdf" data={profile.links.cv} type="application/pdf" aria-label="CV as PDF">
+            <p>
+              Your browser cannot show the PDF here. <a href={profile.links.cv}>Open the CV (PDF)</a>.
+            </p>
+          </object>
+        </section>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .cv-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .rail {
+    position: sticky;
+    top: var(--space-4);
+  }
+  .rail .btn {
+    margin-bottom: var(--space-2);
+  }
+  .small {
+    font-size: var(--type-meta);
+  }
+  .cv-section {
+    margin-bottom: var(--space-6);
+  }
+  .cv-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-3);
+  }
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .timeline li {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: var(--space-3);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .timeline strong {
+    font-weight: 600;
+  }
+  .when {
+    color: var(--muted);
+    font-size: var(--type-meta);
+    padding-top: 0.1rem;
+  }
+  .pdf {
+    width: 100%;
+    height: 80vh;
+    min-height: 36rem;
+    border: 1px solid var(--plate-edge);
+    background: var(--plate);
+  }
+  @media (max-width: 63.99rem) {
+    .cv-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    .rail {
+      position: static;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .timeline li {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+    /* Embedded PDFs are unreliable on phones: the download button above covers it. */
+    .pdf-section {
+      display: none;
+    }
+  }
+</style>

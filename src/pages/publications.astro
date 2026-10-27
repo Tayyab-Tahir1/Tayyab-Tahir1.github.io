@@ -1,0 +1,158 @@
+---
+import Base from '../layouts/Base.astro';
+import PaperEntry from '../components/PaperEntry.astro';
+import { profile, publications } from '../lib/data';
+
+const m = profile.metrics;
+const journalCount = publications.journal.length;
+---
+
+<Base title="Publications" description={`${m.papers} peer-reviewed papers by ${profile.name}, with DOIs.`} current="publications">
+  <div class="wrap page">
+    <header class="page-head">
+      <h1>Publications</h1>
+      <p class="lead">
+        {m.papers} peer-reviewed papers: {m.journal} journal articles and {m.conference} conference papers.
+      </p>
+    </header>
+
+    <div class="pub-grid">
+      <aside class="rail" aria-label="Summary">
+        <dl class="tnum">
+          <div><dt>Citations</dt><dd>{m.citations}</dd></div>
+          <div><dt>h-index</dt><dd>{m.hIndex}</dd></div>
+          <div><dt>i10-index</dt><dd>{m.i10Index}</dd></div>
+        </dl>
+        <p class="muted small">Google Scholar, checked {m.checked}.</p>
+        <ul class="rail-links">
+          <li><a href={profile.links.scholar}>Google Scholar profile</a></li>
+          <li><a href={profile.links.orcid}>ORCID</a></li>
+          <li><a href={profile.links.publicationList}>Publication list (PDF)</a></li>
+        </ul>
+      </aside>
+
+      <div class="lists">
+        <section aria-labelledby="j-title">
+          <h2 id="j-title">Journal articles ({journalCount})</h2>
+          <ol class="papers">
+            {publications.journal.map((paper, i) => <PaperEntry paper={paper} index={i + 1} />)}
+          </ol>
+        </section>
+
+        <section aria-labelledby="c-title">
+          <h2 id="c-title">Conference papers ({publications.conference.length})</h2>
+          <ol class="papers">
+            {publications.conference.map((paper, i) => <PaperEntry paper={paper} index={journalCount + i + 1} />)}
+          </ol>
+        </section>
+
+        <section aria-labelledby="contrib-title" class="contrib">
+          <h2 id="contrib-title">My contribution</h2>
+          <p>{publications.contributionNote}</p>
+        </section>
+
+        <section aria-labelledby="p-title">
+          <h2 id="p-title">Manuscript in preparation</h2>
+          <ul class="papers plain">
+            {
+              publications.inPreparation.map((item) => (
+                <li class="prep">
+                  <p class="prep-title">{item.title}</p>
+                  <p class="muted small">{item.note}</p>
+                  {item.project && <p class="small"><a href={`/projects/${item.project}/`}>Project page</a></p>}
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="t-title">
+          <h2 id="t-title">MSc thesis</h2>
+          <ul class="papers plain">
+            {publications.thesis.map((paper) => <PaperEntry paper={paper} />)}
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .pub-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .rail {
+    position: sticky;
+    top: var(--space-4);
+  }
+  .rail dl {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: start;
+    gap: var(--space-4);
+    margin: 0 0 var(--space-2);
+  }
+  .rail dt {
+    font-size: var(--type-meta);
+    color: var(--muted);
+  }
+  .rail dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+  .small {
+    font-size: var(--type-meta);
+  }
+  .rail-links {
+    list-style: none;
+    padding: var(--space-3) 0 0;
+    margin: var(--space-3) 0 0;
+    border-top: 1px solid var(--rule);
+    font-size: var(--type-meta);
+  }
+  .rail-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .lists section {
+    margin-bottom: var(--space-6);
+  }
+  .lists h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-2);
+  }
+  .papers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .prep {
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .prep-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.3;
+    margin-bottom: var(--space-1);
+  }
+  .contrib p {
+    color: var(--muted);
+  }
+  @media (max-width: 63.99rem) {
+    .pub-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    .rail {
+      position: static;
+    }
+  }
+</style>

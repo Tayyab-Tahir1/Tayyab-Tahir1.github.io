@@ -1,0 +1,338 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Figure from '../../components/Figure.astro';
+import VideoFacade from '../../components/VideoFacade.astro';
+import { getProjects, type Project } from '../../lib/projects';
+import { inlineMarkup, plain } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: {
+      project,
+      prev: projects[i - 1] ?? null,
+      next: projects[i + 1] ?? null,
+    },
+  }));
+}
+
+interface Props {
+  project: Project;
+  prev: Project | null;
+  next: Project | null;
+}
+
+const { project, prev, next } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+const hasBody = Boolean(project.body?.trim());
+
+const methodFigures = d.figures.filter((f) => f.kind === 'method');
+const resultFigures = d.figures.filter((f) => f.kind === 'result');
+const numbered = [...methodFigures, ...resultFigures].map((f, i) => ({ ...f, number: i + 1 }));
+const methodNumbered = numbered.slice(0, methodFigures.length);
+const resultNumbered = numbered.slice(methodFigures.length);
+
+const hasLinks = Boolean(d.links.code || d.links.paper || d.links.other.length);
+const hasVideo = Boolean(d.poster);
+---
+
+<Base title={d.title} description={plain(d.summary)} current="work">
+  <article class="wrap project">
+    <header class="project-head">
+      <p class="crumb"><a href="/#work">All work</a></p>
+      <h1>{d.title}</h1>
+      <p class="lead">{d.summary}</p>
+    </header>
+
+    <div class="project-grid">
+      <aside class="meta" aria-label="Project details">
+        <dl>
+          <div>
+            <dt>Status</dt>
+            <dd>{d.status}</dd>
+          </div>
+          <div>
+            <dt>Year</dt>
+            <dd>{d.year}</dd>
+          </div>
+          <div>
+            <dt>Role</dt>
+            <dd>{d.role}</dd>
+          </div>
+          {
+            d.tools.length > 0 && (
+              <div>
+                <dt>Tools</dt>
+                <dd>{d.tools.join(', ')}</dd>
+              </div>
+            )
+          }
+        </dl>
+        {
+          hasLinks && (
+            <ul class="meta-links">
+              {d.links.code && (
+                <li>
+                  <a href={d.links.code}>Code on GitHub</a>
+                </li>
+              )}
+              {d.links.paper && (
+                <li>
+                  <a href={d.links.paper}>Paper</a>
+                </li>
+              )}
+              {d.links.other.map((l) => (
+                <li>
+                  <a href={l.url}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </aside>
+
+      <div class="reading">
+        {
+          d.question && (
+            <section aria-labelledby="q-title" class="block">
+              <h2 id="q-title">The question</h2>
+              <p class="question">{d.question}</p>
+            </section>
+          )
+        }
+
+        {
+          d.contribution.length > 0 && (
+            <section aria-labelledby="c-title" class="block">
+              <h2 id="c-title">My contribution</h2>
+              <ul class="points">
+                {d.contribution.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          (methodNumbered.length > 0 || hasBody) && (
+            <section aria-labelledby="m-title" class="block">
+              <h2 id="m-title">Method</h2>
+              {methodNumbered.map((f) => (
+                <Figure src={f.src} caption={f.caption} alt={f.alt} number={f.number} plate={f.plate} />
+              ))}
+              {hasBody && (
+                <div class="prose">
+                  <Content />
+                </div>
+              )}
+            </section>
+          )
+        }
+
+        {
+          (resultNumbered.length > 0 || d.findings.length > 0) && (
+            <section aria-labelledby="r-title" class="block">
+              <h2 id="r-title">Results</h2>
+              {d.findings.length > 0 && (
+                <ul class="points">
+                  {d.findings.map((item) => (
+                    <li set:html={inlineMarkup(item)} />
+                  ))}
+                </ul>
+              )}
+              {resultNumbered.map((f) => (
+                <Figure src={f.src} caption={f.caption} alt={f.alt} number={f.number} plate={f.plate} />
+              ))}
+            </section>
+          )
+        }
+
+        {
+          d.limitation && (
+            <section aria-labelledby="l-title" class="block limitation">
+              <h2 id="l-title">Limitations</h2>
+              <p>{d.limitation}</p>
+            </section>
+          )
+        }
+
+        {
+          hasVideo && d.poster && (
+            <section aria-labelledby="v-title" class="block">
+              <h2 id="v-title">Video</h2>
+              <VideoFacade youtube={d.youtube} poster={d.poster} title={d.title} label={d.videoLabel} />
+            </section>
+          )
+        }
+      </div>
+    </div>
+
+    <nav class="pager" aria-label="More projects">
+      {
+        prev ? (
+          <a href={`/projects/${prev.id}/`} rel="prev">
+            <span class="muted">Previous</span>
+            {prev.data.title}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next && (
+          <a href={`/projects/${next.id}/`} rel="next" class="pager-next">
+            <span class="muted">Next</span>
+            {next.data.title}
+          </a>
+        )
+      }
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .project-head {
+    padding-block: clamp(1.5rem, 1rem + 2.5vw, 3.5rem) var(--space-5);
+    border-bottom: 2px solid var(--rule-strong);
+    margin-bottom: var(--space-5);
+  }
+  .crumb {
+    font-size: var(--type-meta);
+    margin-bottom: var(--space-3);
+  }
+  .project-head h1 {
+    max-width: 22ch;
+    margin-bottom: var(--space-3);
+  }
+  .lead {
+    font-size: var(--type-lead);
+    line-height: 1.4;
+    color: var(--muted);
+    max-width: 44ch;
+    margin: 0;
+  }
+  .project-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .meta {
+    position: sticky;
+    top: var(--space-4);
+    font-size: var(--type-meta);
+  }
+  .meta dl {
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .meta dt {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .meta dd {
+    margin: 0;
+    color: var(--muted);
+  }
+  .meta-links {
+    list-style: none;
+    padding: var(--space-3) 0 0;
+    margin: var(--space-4) 0 0;
+    border-top: 1px solid var(--rule);
+  }
+  .meta-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 500;
+  }
+  .reading {
+    max-width: 52rem;
+    min-width: 0;
+  }
+  .block {
+    margin-bottom: var(--space-6);
+  }
+  .block h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-3);
+  }
+  .question {
+    font-family: var(--font-display);
+    font-size: var(--type-lead);
+    line-height: 1.38;
+    max-width: 40ch;
+  }
+  .points {
+    margin: 0 0 var(--space-4);
+    padding-left: 1.1rem;
+    max-width: 64ch;
+  }
+  .points li {
+    margin-bottom: var(--space-2);
+    padding-left: 0.2rem;
+  }
+  .points li::marker {
+    color: var(--accent);
+  }
+  .points :global(strong) {
+    font-weight: 600;
+  }
+  .block :global(.fig) {
+    margin-block: var(--space-4) var(--space-5);
+  }
+  .prose :global(p) {
+    max-width: 64ch;
+  }
+  .limitation {
+    border-top: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: var(--space-3) 0 0 var(--space-4);
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-4);
+  }
+  .pager a {
+    display: grid;
+    gap: var(--space-1);
+    font-weight: 500;
+    text-decoration: none;
+    max-width: 45%;
+    min-height: 44px;
+  }
+  .pager a:hover {
+    text-decoration: underline;
+  }
+  .pager span.muted {
+    font-size: var(--type-meta);
+    font-weight: 400;
+  }
+  .pager-next {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  @media (max-width: 63.99rem) {
+    .project-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    .meta {
+      position: static;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: var(--space-4);
+    }
+    .meta dl {
+      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    }
+  }
+</style>

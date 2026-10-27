@@ -1,0 +1,140 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  youtube: string;
+  poster: ImageMetadata;
+  title: string;
+  label: string;
+}
+
+const { youtube, poster, title, label } = Astro.props;
+
+/** Accepts a full YouTube URL (watch, youtu.be, shorts, embed) or a bare 11-character video ID. */
+function videoId(input: string): string | null {
+  const value = input.trim();
+  if (!value) return null;
+  if (/^[\w-]{11}$/.test(value)) return value;
+  try {
+    const url = new URL(value);
+    if (url.hostname.endsWith('youtu.be')) return url.pathname.slice(1, 12) || null;
+    const v = url.searchParams.get('v');
+    if (v) return v;
+    const match = url.pathname.match(/\/(?:embed|shorts|live)\/([\w-]{11})/);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
+const id = videoId(youtube);
+if (youtube.trim() && !id) {
+  throw new Error(`Could not read a YouTube video ID from "${youtube}" (project: ${title}).`);
+}
+const watchUrl = id ? `https://www.youtube.com/watch?v=${id}` : '';
+const embedUrl = id ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0` : '';
+---
+
+<figure class="video">
+  {
+    id ? (
+      <a
+        class="frame facade"
+        href={watchUrl}
+        data-embed={embedUrl}
+        data-title={`${title}: video`}
+        aria-label={`Play video: ${title} (loads YouTube)`}
+      >
+        <Image src={poster} alt="" widths={[640, 960, 1280]} sizes="(min-width: 64rem) 52rem, 100vw" format="webp" loading="lazy" />
+        <span class="play" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+        </span>
+      </a>
+    ) : (
+      <div class="frame pending">
+        <Image src={poster} alt={`Frame from the ${title} demo video`} widths={[640, 960, 1280]} sizes="(min-width: 64rem) 52rem, 100vw" format="webp" loading="lazy" />
+      </div>
+    )
+  }
+  <figcaption class="video-caption">
+    {
+      id ? (
+        <>
+          <span>{label}. Plays from YouTube (privacy-enhanced mode) after you click.</span>
+          <a href={watchUrl}>Watch on YouTube</a>
+        </>
+      ) : (
+        <span><b>Video coming soon.</b> A {label.toLowerCase()} will appear here.</span>
+      )
+    }
+  </figcaption>
+</figure>
+
+<script>
+  // Swap the poster for the YouTube player only after a click, so no YouTube request happens on page load.
+  document.querySelectorAll<HTMLAnchorElement>('a.facade[data-embed]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const iframe = document.createElement('iframe');
+      iframe.src = link.dataset.embed ?? '';
+      iframe.title = link.dataset.title ?? 'Video';
+      iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.allowFullscreen = true;
+      const frame = document.createElement('div');
+      frame.className = 'frame';
+      frame.appendChild(iframe);
+      link.replaceWith(frame);
+      iframe.focus();
+    });
+  });
+</script>
+
+<style>
+  .video :global(.frame) {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    background: #0e1412;
+    border: 1px solid var(--plate-edge);
+    overflow: hidden;
+  }
+  .video :global(.frame img),
+  .video :global(.frame iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
+  }
+  .pending :global(img) {
+    filter: saturate(0.55);
+    opacity: 0.8;
+  }
+  .play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--on-accent);
+    transition: transform 140ms var(--ease);
+  }
+  .facade:hover .play {
+    transform: scale(1.06);
+  }
+  .video-caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-3);
+    max-width: none;
+  }
+</style>

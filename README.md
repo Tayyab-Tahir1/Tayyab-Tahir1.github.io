@@ -48,7 +48,7 @@ build before pushing.
    | `title` | Project name |
    | `slug` | URL part: the page is `/projects/<slug>/`. Use lowercase and hyphens, and match the file name |
    | `order` | Position in the list on the home page (1 is first) |
-   | `featured` | `false` hides it from the main list and shows it in the "Also" line instead |
+   | `tier` | `main` (full row with thumbnail on the home page), `compact` (short row: title, result, status) or `also` (one-line mention) |
    | `year`, `status` | Shown in the project details, for example `"2026"` and `Working prototype` |
    | `summary` | One sentence under the title |
    | `result` | One qualified result line for the home page. Wrap the key number in `**...**` to bold it |
@@ -56,7 +56,7 @@ build before pushing.
    | `question`, `contribution`, `findings`, `limitation` | The sections of the project page. Leave one out and that section disappears |
    | `youtube` | Empty `""` until the video is online (see below) |
    | `thumbnail`, `thumbnailAlt` | Image for the home-page row and its description for screen readers |
-   | `poster` | Video poster. Leave it out if the project has no video |
+   | `poster` | Video poster, shown right under the summary. Leave it out if the project has no video |
    | `figures` | List of `src`, `caption`, `kind` (`method` or `result`) and optional `plate: false` for screenshots |
    | `links` | `code`, `paper`, and `other` (a list of `label` and `url`) |
 
@@ -75,9 +75,12 @@ youtube: "https://youtu.be/AbCdEfGhIjK"
 Any normal YouTube link works (`youtu.be/...`, `youtube.com/watch?v=...`, `/shorts/...`, or the bare
 11-character ID). Until then the page shows the poster with "Video coming soon". With a link, the page shows the
 poster with a play button; YouTube (privacy-enhanced `youtube-nocookie.com`) loads only after a click. The
-label under the video comes from `videoLabel` (default `45-second demo`).
+label under the video comes from `videoLabel` (default `45-second demo`); without a link it reads
+"45-second demo, coming soon".
 
 The MP4 files are not in this repository on purpose: GitHub Pages is not meant for large video files.
+
+Clicking a figure opens the original image file at full size.
 
 ## Add a paper
 

@@ -1,6 +1,7 @@
 # Site-wide facts about me. Edit text here; pages read it at build time.
 name: Tayyab Tahir
 tagline: Reinforcement learning, predictive control and trustworthy AI for energy systems and field robots.
+researchQuestion: I study how learned controllers can run energy systems reliably, and how uncertainty estimates make robot perception safer to act on.
 role: Early Stage Researcher
 affiliation: TalTech, Centre for Biorobotics
 affiliationNote: Horizon Europe project
@@ -42,6 +43,7 @@ metrics:
   hIndex: 6
   i10Index: 4
   checked: October 2026
+  checkedShort: Oct 2026
 
 links:
   cv: /cv/Tayyab_Tahir_CV.pdf

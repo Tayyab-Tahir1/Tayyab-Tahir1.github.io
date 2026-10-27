@@ -19,6 +19,7 @@ const linksSchema = z.object({
 const profileSchema = z.object({
   name: z.string(),
   tagline: z.string(),
+  researchQuestion: z.string(),
   role: z.string(),
   affiliation: z.string(),
   affiliationNote: z.string(),
@@ -36,6 +37,7 @@ const profileSchema = z.object({
     hIndex: z.number(),
     i10Index: z.number(),
     checked: z.string(),
+    checkedShort: z.string(),
   }),
   links: linksSchema,
   education: z.array(

@@ -10,7 +10,8 @@ const projects = defineCollection({
       title: z.string(),
       slug: z.string(),
       order: z.number(),
-      featured: z.boolean().default(true),
+      // main: full row with thumbnail on the home page; compact: short row; also: one-line mention.
+      tier: z.enum(['main', 'compact', 'also']).default('main'),
       year: z.string(),
       status: z.string(),
       summary: z.string(),

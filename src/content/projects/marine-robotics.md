@@ -2,6 +2,7 @@
 title: "Marine robotics: BlueROV servoing and dynamic positioning"
 slug: marine-robotics
 order: 6
+tier: compact
 year: 2024-2025
 status: Completed, team projects
 summary: Two MSc team projects in marine control, a BlueROV that tracks a buoy by vision and a dynamic-positioning controller for a vessel.

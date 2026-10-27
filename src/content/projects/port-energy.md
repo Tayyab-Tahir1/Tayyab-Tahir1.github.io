@@ -14,11 +14,11 @@ contribution:
   - Benchmarked DQN, PPO, MPC in CVXPY and an LSTM trained to imitate MPC.
   - Ran the trained policy at three other ports without retraining to see where it breaks.
 findings:
-  - The LSTM imitation policy stayed within 2% of MPC cost with about 250 times faster inference.
-  - "Oslo simulation: MPC-LSTM cut the electricity bill by 38.9% and CO2 by 45.8% against the non-optimised base case."
+  - "Compared with MPC itself: the LSTM imitation policy stayed within 2% of MPC's cost, with about 250 times faster inference (LSTM forward pass on a CPU vs solving the MPC optimisation at each step)."
+  - "Compared with the non-optimised base case: in the Oslo simulation, MPC-LSTM cut the electricity bill by 38.9% and CO2 by 45.8%."
   - At the other ports (Copenhagen, Amsterdam, Nice) the same policy saturated hydrogen storage and raised emissions where carbon intensity was missing from the state.
 limitation: All results come from simulation on one year of hourly data. The transfer test shows that the policy does not carry over to other ports without retraining, and that carbon intensity has to be part of the state.
-youtube: ""
+youtube: "https://youtu.be/uY3F20XuRbY"
 thumbnail: ../../assets/projects/port-energy/thumb.jpg
 thumbnailAlt: Animated port energy system with hourly power flows, battery state of charge and controller actions.
 poster: ../../assets/projects/port-energy/thumb.jpg

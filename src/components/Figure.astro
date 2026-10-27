@@ -1,5 +1,5 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
   plate?: boolean;
   eager?: boolean;
   sizes?: string;
+  class?: string;
 }
 
 const {
@@ -20,14 +21,15 @@ const {
   plate = true,
   eager = false,
   sizes = '(min-width: 64rem) 52rem, 100vw',
+  class: className,
 } = Astro.props;
 
-// Full-size link so dense plots stay readable when opened on their own.
-const full = await getImage({ src, width: Math.min(src.width, 2200), format: 'webp' });
+// Clicking a figure opens the original file at full resolution, so dense plots stay readable.
+const original = src.src;
 ---
 
-<figure class="fig">
-  <a class:list={['plate', { 'plate-flush': !plate }]} href={full.src} aria-label={`Open full-size image: ${alt}`}>
+<figure class:list={['fig', className]}>
+  <a class:list={['plate', { 'plate-flush': !plate }]} href={original} aria-label={`Open full-size image: ${alt}`}>
     <Image
       src={src}
       alt={alt}
@@ -50,5 +52,8 @@ const full = await getImage({ src, width: Math.min(src.width, 2200), format: 'we
   }
   .fig a:hover {
     border-color: var(--accent);
+  }
+  .fig a {
+    cursor: zoom-in;
   }
 </style>

@@ -300,6 +300,21 @@ ul {
   height: auto;
 }
 
+/* Dark mode: a matte frame around white figures so they do not read as bare white blocks. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .plate {
+    border-radius: var(--radius);
+    box-shadow: 0 0 0 0.5rem var(--surface), 0 0 0 calc(0.5rem + 1px) var(--rule);
+    margin: calc(0.5rem + 1px);
+  }
+}
+
+:root[data-theme='dark'] .plate {
+  border-radius: var(--radius);
+  box-shadow: 0 0 0 0.5rem var(--surface), 0 0 0 calc(0.5rem + 1px) var(--rule);
+  margin: calc(0.5rem + 1px);
+}
+
 figure {
   margin: 0;
 }

@@ -9,8 +9,9 @@ import heroImage from '../assets/hero/hero-microgrid-crop.png';
 import researchMap from '../assets/hero/research-map.png';
 
 const projects = await getProjects();
-const featured = projects.filter((p) => p.data.featured);
-const others = projects.filter((p) => !p.data.featured);
+const main = projects.filter((p) => p.data.tier === 'main');
+const compact = projects.filter((p) => p.data.tier === 'compact');
+const others = projects.filter((p) => p.data.tier === 'also');
 const recent = publications.journal.slice(0, 3);
 const m = profile.metrics;
 ---
@@ -20,10 +21,11 @@ const m = profile.metrics;
     <div class="hero-text">
       <h1 id="hero-name">{profile.name}</h1>
       <p class="tagline">{profile.tagline}</p>
+      <p class="question">{profile.researchQuestion}</p>
       <p class="role">
         {profile.role}, <strong>{profile.affiliation}</strong> ({profile.affiliationNote}), {profile.location}.
         <span class="evidence tnum">
-          {m.papers} peer-reviewed papers, {m.citations} citations, h-index {m.hIndex} (Google Scholar, {m.checked}).
+          {m.papers} peer-reviewed papers, {m.citations} citations, h-index {m.hIndex} (<a href={profile.links.scholar}>Google Scholar, {m.checkedShort}</a>).
         </span>
       </p>
       <div class="link-row">
@@ -39,7 +41,7 @@ const m = profile.metrics;
           src={heroImage}
           alt="Exploded view of a microgrid: grid connection, EV and vehicle-to-grid, hydrogen, battery storage and solar PV layers, with an RL agent layer sending control actions to each."
           widths={[400, 600, 800, 1180]}
-          sizes="(min-width: 64rem) 28rem, (min-width: 48rem) 24rem, 80vw"
+          sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 20rem, 80vw"
           format="webp"
           loading="eager"
           fetchpriority="high"
@@ -54,7 +56,7 @@ const m = profile.metrics;
     </div>
     <ol class="rows">
       {
-        featured.map((p) => (
+        main.map((p) => (
           <li class="row">
             <div class="row-thumb">
               {p.data.thumbnail && (
@@ -85,6 +87,23 @@ const m = profile.metrics;
       }
     </ol>
     {
+      compact.length > 0 && (
+        <ul class="compact" aria-label="More projects">
+          {compact.map((p) => (
+            <li class="compact-row">
+              <h3 class="compact-title">
+                <a class="row-link" href={`/projects/${p.id}/`}>
+                  {p.data.title}
+                </a>
+              </h3>
+              <p class="compact-result" set:html={inlineMarkup(p.data.result)} />
+              <p class="row-status">{p.data.status}</p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {
       others.length > 0 && (
         <p class="also">
           Also:{' '}
@@ -109,7 +128,28 @@ const m = profile.metrics;
         forecasting and estimation. Both also need uncertainty estimates: prediction intervals, and checks on how
         often the true value falls inside them.
       </p>
+      <ul class="map-html" aria-label="Research themes">
+        <li>
+          <h3>Methods</h3>
+          <p>Deep RL (DQN, PPO, SAC), model predictive control, imitation learning, forecasting and sequence models.</p>
+        </li>
+        <li>
+          <h3>Application areas</h3>
+          <p>
+            <strong>Energy systems:</strong> microgrids, V2G, virtual power plants, home energy management, port
+            hydrogen systems.
+          </p>
+          <p>
+            <strong>Field robotics:</strong> wheel-slip estimation, traction control (in progress), marine robotics.
+          </p>
+        </li>
+        <li>
+          <h3>Uncertainty and validation</h3>
+          <p>Probabilistic forecasts, prediction intervals, hardware-in-the-loop testing.</p>
+        </li>
+      </ul>
       <Figure
+        class="map-figure"
         src={researchMap}
         caption="Research themes: learning-based control for energy systems and field robotics. Traction control is in progress."
         alt="Diagram of research themes. Top: reinforcement learning and predictive control (deep RL, MPC, imitation learning, forecasting). Middle: energy systems (microgrids, V2G, virtual power plants, home energy management, port hydrogen systems) and field robotics (wheel-slip estimation, traction control in progress, marine robotics). Bottom: uncertainty and validation (probabilistic forecasts, prediction intervals, hardware-in-the-loop testing)."
@@ -152,10 +192,16 @@ const m = profile.metrics;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     gap: var(--space-5) var(--space-6);
     align-items: center;
-    padding-block: clamp(1.5rem, 0.5rem + 3vw, 3.5rem) 0;
+    padding-block: clamp(1.25rem, 0.5rem + 2vw, 2.25rem) 0;
+  }
+  #work {
+    padding-top: clamp(2rem, 1rem + 2vw, 2.75rem);
+  }
+  #work .section-head {
+    margin-bottom: var(--space-4);
   }
   .hero h1 {
-    font-size: var(--type-display);
+    font-size: clamp(2.4rem, 1.7rem + 2.4vw, 3.6rem);
     font-weight: 450;
     letter-spacing: -0.025em;
     line-height: 1.02;
@@ -166,7 +212,12 @@ const m = profile.metrics;
     font-size: var(--type-lead);
     line-height: 1.32;
     max-width: 30ch;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+  .question {
+    max-width: 52ch;
+    text-wrap: pretty;
+    margin-bottom: var(--space-3);
   }
   .role {
     color: var(--muted);
@@ -184,7 +235,7 @@ const m = profile.metrics;
   }
   .hero-figure {
     justify-self: end;
-    width: min(100%, 27rem);
+    width: min(100%, 21rem);
   }
   .hero-plate {
     background: #f6f5f2;
@@ -269,6 +320,40 @@ const m = profile.metrics;
     padding-top: 0.3rem;
     text-align: right;
   }
+  .compact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .compact-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr) 9rem;
+    gap: var(--space-4);
+    align-items: baseline;
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .compact-title {
+    font-size: 1.05rem;
+    margin: 0;
+  }
+  .compact-row:hover .row-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+  .compact-row:has(.row-link:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+  }
+  .compact-result {
+    font-size: var(--type-meta);
+    margin: 0;
+  }
+  .compact-result :global(strong) {
+    font-weight: 600;
+  }
   .also {
     margin-top: var(--space-4);
     font-size: var(--type-meta);
@@ -284,6 +369,27 @@ const m = profile.metrics;
   }
   .map-text {
     color: var(--muted);
+  }
+  .map-html {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .map-html li {
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+  .map-html h3 {
+    font-size: 1.05rem;
+    margin-bottom: var(--space-2);
+  }
+  .map-html p {
+    font-size: var(--type-meta);
+    margin-bottom: var(--space-2);
+  }
+  .map-html strong {
+    font-weight: 600;
   }
 
   .pubs-head {
@@ -347,6 +453,24 @@ const m = profile.metrics;
     }
   }
   @media (max-width: 47.99rem) {
+    /* The diagram's labels are too small on phones: show the same content as text. */
+    .map-html {
+      display: block;
+    }
+    .map-grid :global(.map-figure) {
+      display: none;
+    }
+    .compact-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+    .compact-row .row-status {
+      grid-column: auto;
+      grid-row: auto;
+      align-self: start;
+      text-align: left;
+      padding-top: 0;
+    }
     .row {
       grid-template-columns: 8.5rem minmax(0, 1fr);
       gap: var(--space-3);

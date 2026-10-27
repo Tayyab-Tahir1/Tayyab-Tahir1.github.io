@@ -2,7 +2,7 @@
 title: City blackout resilience planner
 slug: city-blackout-planner
 order: 7
-featured: false
+tier: also
 year: "2026"
 status: Hackathon prototype
 summary: A 72-hour rolling-horizon MILP that groups EV fleets, batteries and generators into energy islands on a city-scale grid twin.

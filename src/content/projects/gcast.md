@@ -18,7 +18,7 @@ findings:
   - Every estimate has its own interval, so a controller can tell a confident estimate from an uncertain one.
   - Numerical results will appear with the paper, in preparation for Engineering Applications of Artificial Intelligence.
 limitation: So far the evaluation is offline, on public datasets. Results are held back until the paper is submitted.
-youtube: ""
+youtube: "https://youtu.be/LcPMgmFlt9A"
 thumbnail: ../../assets/projects/gcast/rover-thumb.png
 thumbnailAlt: Exploded rover illustration with IMU and wheel-encoder signals feeding a slip estimator with an uncertainty interval.
 poster: ../../assets/projects/gcast/thumb.jpg

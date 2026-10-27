@@ -2,10 +2,11 @@
 title: Virtual power plant control with deep RL
 slug: virtual-power-plant
 order: 4
+tier: compact
 year: 2025-2026
 status: Simulation study
 summary: One soft actor-critic agent runs energy arbitrage and frequency reserve for PV, wind, a battery and a workplace EV fleet behind one grid connection.
-result: "Year-long simulation: SAC earned **71% more net value** than rule-based control, with no EV charge violations. Single seed."
+result: "Year-long simulation: SAC earned **71% more net value** than rule-based control (net value = day-ahead energy revenue minus battery and EV wear costs), with no EV charge violations. Single seed."
 role: Simulator, agent training and evaluation
 tools: [Python, PyTorch, Soft actor-critic, OMIE market data, SLURM]
 question: Can one RL agent trade energy and deliver frequency reserve for a mixed plant, and still charge every car before it leaves?
@@ -14,10 +15,10 @@ contribution:
   - A soft actor-critic agent that sets battery power, EV charging and PV and wind curtailment, compared with a rule-based baseline.
   - A year-long evaluation and a held-out week with frequency containment reserve (FCR) requests.
 findings:
-  - Over the simulated year (in-sample prices), SAC ended with 71% more net value than the rule-based baseline and cut EV departure-charge violations from 3,294 to 0.
+  - Over the simulated year (in-sample prices), SAC ended with 71% more net value than the rule-based baseline and cut EV departure-charge violations from 3,294 to 0. Net value here is day-ahead energy revenue minus battery and EV wear (throughput) costs.
   - "In the held-out reserve week, SAC delivered more of the requested FCR power than the baseline (0.94 vs 0.73) but ended with EUR 219 less net value."
 limitation: This is a single-seed simulation, and the year-long result uses in-sample prices. In the held-out week the agent traded net value for better reserve delivery. More seeds and out-of-sample years are needed before drawing firm conclusions.
-youtube: ""
+youtube: "https://youtu.be/451PqA7WsmI"
 thumbnail: ../../assets/projects/virtual-power-plant/thumb.jpg
 thumbnailAlt: Winter week of the simulated virtual power plant, SAC agent and rule-based baseline side by side.
 poster: ../../assets/projects/virtual-power-plant/thumb.jpg

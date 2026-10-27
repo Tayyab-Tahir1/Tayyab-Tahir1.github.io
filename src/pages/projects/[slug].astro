@@ -47,6 +47,18 @@ const hasVideo = Boolean(d.poster);
       <p class="lead">{d.summary}</p>
     </header>
 
+    {
+      hasVideo && d.poster && (
+        <div class="project-grid video-row">
+          <div class="video-spacer" />
+          <section aria-labelledby="v-title" class="video-block">
+            <h2 id="v-title" class="visually-hidden">Video</h2>
+            <VideoFacade youtube={d.youtube} poster={d.poster} title={d.title} label={d.videoLabel} />
+          </section>
+        </div>
+      )
+    }
+
     <div class="project-grid">
       <aside class="meta" aria-label="Project details">
         <dl>
@@ -160,14 +172,6 @@ const hasVideo = Boolean(d.poster);
           )
         }
 
-        {
-          hasVideo && d.poster && (
-            <section aria-labelledby="v-title" class="block">
-              <h2 id="v-title">Video</h2>
-              <VideoFacade youtube={d.youtube} poster={d.poster} title={d.title} label={d.videoLabel} />
-            </section>
-          )
-        }
       </div>
     </div>
 
@@ -214,6 +218,12 @@ const hasVideo = Boolean(d.poster);
     color: var(--muted);
     max-width: 44ch;
     margin: 0;
+  }
+  .video-row {
+    margin-bottom: var(--space-6);
+  }
+  .video-block {
+    max-width: 52rem;
   }
   .project-grid {
     display: grid;
@@ -325,6 +335,12 @@ const hasVideo = Boolean(d.poster);
     .project-grid {
       grid-template-columns: 1fr;
       gap: var(--space-4);
+    }
+    .video-spacer {
+      display: none;
+    }
+    .video-row {
+      margin-bottom: var(--space-5);
     }
     .meta {
       position: static;

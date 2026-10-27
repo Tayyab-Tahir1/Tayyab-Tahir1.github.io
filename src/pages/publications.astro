@@ -23,7 +23,7 @@ const journalCount = publications.journal.length;
           <div><dt>h-index</dt><dd>{m.hIndex}</dd></div>
           <div><dt>i10-index</dt><dd>{m.i10Index}</dd></div>
         </dl>
-        <p class="muted small">Google Scholar, checked {m.checked}.</p>
+        <p class="muted small"><a href={profile.links.scholar}>Google Scholar, {m.checkedShort}</a></p>
         <ul class="rail-links">
           <li><a href={profile.links.scholar}>Google Scholar profile</a></li>
           <li><a href={profile.links.orcid}>ORCID</a></li>

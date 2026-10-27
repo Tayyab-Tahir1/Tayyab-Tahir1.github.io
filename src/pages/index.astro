@@ -5,7 +5,7 @@ import Figure from '../components/Figure.astro';
 import { profile, publications, splitAuthors } from '../lib/data';
 import { getProjects } from '../lib/projects';
 import { inlineMarkup } from '../lib/format';
-import heroImage from '../assets/hero/hero-microgrid-crop.png';
+import heroImage from '../assets/hero/hero-microgrid-exploded.png';
 import researchMap from '../assets/hero/research-map.png';
 
 const projects = await getProjects();
@@ -36,12 +36,12 @@ const m = profile.metrics;
       </div>
     </div>
     <figure class="hero-figure">
-      <div class="hero-plate">
+      <div class="hero-plate" data-hero3d>
         <Image
           src={heroImage}
-          alt="Exploded view of a microgrid: grid connection, EV and vehicle-to-grid, hydrogen, battery storage and solar PV layers, with an RL agent layer sending control actions to each."
-          widths={[400, 600, 800, 1180]}
-          sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 20rem, 80vw"
+          alt="Exploded 3-D view of a multi-energy microgrid: grid connection with substation and pylon, EV charging with vehicle-to-grid, hydrogen electrolyser, tank and fuel cell, battery storage and solar PV, with a reinforcement-learning agent layer sending control actions to each."
+          widths={[400, 600, 800, 1200]}
+          sizes="(min-width: 64rem) 24rem, (min-width: 40rem) 22rem, 80vw"
           format="webp"
           loading="eager"
           fetchpriority="high"
@@ -186,6 +186,89 @@ const m = profile.metrics;
   </section>
 </Base>
 
+<script>
+  // Progressive enhancement: the static figure stays unless the screen is wide, WebGL works and the
+  // visitor has not asked for reduced motion. three.js loads in its own chunk, only in that case.
+  type Hero = { dispose(): void };
+  const plate = document.querySelector<HTMLElement>('[data-hero3d]');
+  const wide = window.matchMedia('(min-width: 900px)');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function hasWebGL(): boolean {
+    try {
+      const probe = document.createElement('canvas');
+      const gl = probe.getContext('webgl2') ?? probe.getContext('webgl');
+      gl?.getExtension('WEBGL_lose_context')?.loseContext();
+      return Boolean(gl);
+    } catch {
+      return false;
+    }
+  }
+
+  let hero: Hero | null = null;
+  let loading = false;
+  const canAnimate = (): boolean => wide.matches && !reduced.matches;
+
+  async function mount(target: HTMLElement): Promise<void> {
+    if (hero || loading) return;
+    loading = true;
+    const canvas = document.createElement('canvas');
+    canvas.className = 'hero-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    const labels = document.createElement('div');
+    labels.className = 'hero-labels';
+    labels.setAttribute('aria-hidden', 'true');
+    target.append(canvas, labels);
+    try {
+      const { mountMicrogridHero } = await import('../scripts/microgrid-hero.js');
+      // The screen may have narrowed (or motion been reduced) while the chunk was loading.
+      if (!canAnimate()) {
+        canvas.remove();
+        labels.remove();
+        return;
+      }
+      hero = mountMicrogridHero(canvas, {
+        labelLayer: labels,
+        reducedMotion: false,
+        onFirstFrame: () => target.classList.add('is-live'),
+      });
+    } catch (error) {
+      console.error('Animated hero unavailable; keeping the static figure.', error);
+      canvas.remove();
+      labels.remove();
+    } finally {
+      loading = false;
+    }
+  }
+
+  function unmount(target: HTMLElement): void {
+    target.classList.remove('is-live');
+    hero?.dispose();
+    hero = null;
+    target.querySelectorAll('.hero-canvas, .hero-labels').forEach((node) => node.remove());
+  }
+
+  function update(): void {
+    if (!plate) return;
+    if (canAnimate() && hasWebGL()) {
+      void mount(plate);
+    } else {
+      unmount(plate);
+    }
+  }
+
+  if (plate) {
+    const start = () => update();
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(start, { timeout: 1200 });
+    } else {
+      setTimeout(start, 200);
+    }
+    wide.addEventListener('change', update);
+    reduced.addEventListener('change', update);
+  }
+</script>
+
 <style>
   .hero {
     display: grid;
@@ -235,16 +318,52 @@ const m = profile.metrics;
   }
   .hero-figure {
     justify-self: end;
-    width: min(100%, 21rem);
+    width: min(100%, 24rem);
   }
+  /* The plate stays light in both themes: the figure is drawn in material colours on warm paper. */
   .hero-plate {
-    background: #f6f5f2;
+    position: relative;
+    overflow: hidden;
+    background: #f5f4f0;
     border: 1px solid var(--hero-edge);
     border-radius: var(--radius);
   }
   .hero-plate :global(img) {
+    display: block;
     width: 100%;
     height: auto;
+    transition: opacity 600ms var(--ease);
+  }
+  .hero-plate :global(.hero-canvas),
+  .hero-plate :global(.hero-labels) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 600ms var(--ease);
+    pointer-events: none;
+  }
+  .hero-plate:global(.is-live) :global(.hero-canvas),
+  .hero-plate:global(.is-live) :global(.hero-labels) {
+    opacity: 1;
+  }
+  .hero-plate:global(.is-live) :global(img) {
+    opacity: 0;
+  }
+  .hero-plate :global(.mg-label) {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    line-height: 1;
+    color: #202b29;
+  }
+  .hero-plate :global(.mg-tick) {
+    height: 1px;
+    background: #202b29;
+    opacity: 0.55;
   }
 
   .rows {

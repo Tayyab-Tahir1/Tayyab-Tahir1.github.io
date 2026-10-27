@@ -2,7 +2,7 @@
 title: "GlassML: glass-box ML testbench"
 slug: glassml
 order: 5
-tier: compact
+tier: main
 year: "2026"
 status: Working prototype
 summary: A self-hosted web app to profile data, build models as graphs and run supervised, deep and RL experiments with live diagnostics.
@@ -16,6 +16,8 @@ contribution:
   - "Testbench: training runs with live metrics, plain-language diagnostics and run comparison. An assistant drafts a plan, and nothing runs until you approve it."
 findings: []
 limitation: A working prototype. The demo and screenshots come from a test install with small sample datasets.
+cover: ../../assets/projects/glassml/cover.jpg
+coverAlt: "Illustration of a machine-learning workbench: a data lab, robot arms forging a model, and a glass test chamber."
 youtube: "https://youtu.be/Oqu_mClTg78"
 thumbnail: ../../assets/projects/glassml/glassml-run.png
 thumbnailAlt: GlassML run view with training curves and automatic diagnostics.

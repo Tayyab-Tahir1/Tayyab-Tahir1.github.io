@@ -24,6 +24,10 @@ const projects = defineCollection({
       limitation: z.string().optional(),
       youtube: z.string().default(''),
       videoLabel: z.string().default('45-second demo'),
+      // Illustrated cover: used for the home-page row and the project-page banner when set.
+      cover: image().optional(),
+      coverAlt: z.string().default(''),
+      coverCaption: z.string().optional(),
       thumbnail: image().optional(),
       thumbnailAlt: z.string().default(''),
       poster: image().optional(),

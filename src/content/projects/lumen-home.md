@@ -2,6 +2,7 @@
 title: "Lumen Home: home energy digital twin"
 slug: lumen-home
 order: 3
+tier: main
 year: "2026"
 status: Working prototype
 summary: A household energy app and simulator for a home with solar, a battery, an EV and a heat pump, with a 36-hour plan it can explain.
@@ -17,6 +18,8 @@ findings:
   - "Tallinn simulation: 35% lower annual bill than the same house running on default rules."
   - With load shedding, the time the house can run through a blackout rose from 2.3 to 19.3 hours in simulation.
 limitation: These are simulation results for one Tallinn household, with default rules as the baseline. The planner optimises the median forecast; the P10 to P90 bands are only displayed and do not enter the optimisation. The household in the screenshots is a demo scenario.
+cover: ../../assets/projects/lumen-home/cover.jpg
+coverAlt: "Illustration of a snowy Nordic house with rooftop solar, a home battery, a heat pump and an electric car charging."
 youtube: "https://youtu.be/jy0j2Rhqj0M"
 thumbnail: ../../assets/projects/lumen-home/lumen-home-day.png
 thumbnailAlt: Lumen Home dashboard with live household power flows and a 24-hour forecast.

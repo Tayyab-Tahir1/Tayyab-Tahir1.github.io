@@ -2,6 +2,7 @@
 title: "GCAST: uncertainty-aware wheel-slip estimation"
 slug: gcast
 order: 2
+tier: main
 year: 2025 to present
 status: In progress, paper in preparation
 summary: A transformer that estimates rover wheel slip from multi-rate IMU and wheel-odometry streams and gives each estimate a prediction interval.
@@ -18,6 +19,9 @@ findings:
   - Every estimate has its own interval, so a controller can tell a confident estimate from an uncertain one.
   - Numerical results will appear with the paper, in preparation for Engineering Applications of Artificial Intelligence.
 limitation: So far the evaluation is offline, on public datasets. Results are held back until the paper is submitted.
+cover: ../../assets/projects/gcast/cover.jpg
+coverAlt: "Illustration of a four-wheeled inspection robot driving along a trench towards a buried concrete pipe, with an uncertainty band above it."
+coverCaption: "Illustration: GCAST is developed for PIPEON in-pipe inspection robots; current results use public rover datasets."
 youtube: "https://youtu.be/LcPMgmFlt9A"
 thumbnail: ../../assets/projects/gcast/rover-thumb.png
 thumbnailAlt: Exploded rover illustration with IMU and wheel-encoder signals feeding a slip estimator with an uncertainty interval.

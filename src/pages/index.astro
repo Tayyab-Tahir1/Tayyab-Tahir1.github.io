@@ -59,10 +59,10 @@ const m = profile.metrics;
         main.map((p) => (
           <li class="row">
             <div class="row-thumb">
-              {p.data.thumbnail && (
+              {(p.data.cover ?? p.data.thumbnail) && (
                 <Image
-                  src={p.data.thumbnail}
-                  alt={p.data.thumbnailAlt}
+                  src={(p.data.cover ?? p.data.thumbnail)!}
+                  alt={p.data.cover ? p.data.coverAlt : p.data.thumbnailAlt}
                   widths={[320, 480, 640]}
                   sizes="(min-width: 48rem) 15rem, 10rem"
                   format="webp"

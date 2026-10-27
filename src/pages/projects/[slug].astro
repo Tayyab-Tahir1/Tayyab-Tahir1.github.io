@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Figure from '../../components/Figure.astro';
 import VideoFacade from '../../components/VideoFacade.astro';
@@ -41,10 +42,20 @@ const hasVideo = Boolean(d.poster);
 
 <Base title={d.title} description={plain(d.summary)} current="work">
   <article class="wrap project">
-    <header class="project-head">
-      <p class="crumb"><a href="/#work">All work</a></p>
-      <h1>{d.title}</h1>
-      <p class="lead">{d.summary}</p>
+    <header class:list={['project-head', { 'has-cover': d.cover }]}>
+      <div class="head-text">
+        <p class="crumb"><a href="/#work">All work</a></p>
+        <h1>{d.title}</h1>
+        <p class="lead">{d.summary}</p>
+      </div>
+      {
+        d.cover && (
+          <figure class="cover">
+            <Image src={d.cover} alt={d.coverAlt} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 34rem, 100vw" format="webp" loading="eager" />
+            {d.coverCaption && <figcaption class="muted">{d.coverCaption}</figcaption>}
+          </figure>
+        )
+      }
     </header>
 
     {
@@ -207,6 +218,28 @@ const hasVideo = Boolean(d.poster);
   .crumb {
     font-size: var(--type-meta);
     margin-bottom: var(--space-3);
+  }
+  .project-head.has-cover {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+  @media (min-width: 60rem) {
+    .project-head.has-cover {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    }
+  }
+  .cover {
+    margin: 0;
+  }
+  .cover img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  .cover figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--type-meta);
   }
   .project-head h1 {
     max-width: 22ch;

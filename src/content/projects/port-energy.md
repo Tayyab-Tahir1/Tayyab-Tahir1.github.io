@@ -2,6 +2,7 @@
 title: Smart port energy system
 slug: port-energy
 order: 1
+tier: main
 year: "2025"
 status: Completed, MSc thesis
 summary: Energy management for a port microgrid with battery and hydrogen storage, comparing deep RL, MPC and an LSTM that imitates MPC.
@@ -18,6 +19,8 @@ findings:
   - "Compared with the non-optimised base case: in the Oslo simulation, MPC-LSTM cut the electricity bill by 38.9% and CO2 by 45.8%."
   - At the other ports (Copenhagen, Amsterdam, Nice) the same policy saturated hydrogen storage and raised emissions where carbon intensity was missing from the state.
 limitation: All results come from simulation on one year of hourly data. The transfer test shows that the policy does not carry over to other ports without retraining, and that carbon intensity has to be part of the state.
+cover: ../../assets/projects/port-energy/cover.jpg
+coverAlt: "Illustration of a container port with gantry cranes, container ships on shore power, solar roofs, battery and hydrogen storage."
 youtube: "https://youtu.be/uY3F20XuRbY"
 thumbnail: ../../assets/projects/port-energy/thumb.jpg
 thumbnailAlt: Animated port energy system with hourly power flows, battery state of charge and controller actions.

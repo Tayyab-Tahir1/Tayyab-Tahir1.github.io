@@ -2,7 +2,7 @@
 title: "Marine robotics: BlueROV servoing and dynamic positioning"
 slug: marine-robotics
 order: 6
-tier: compact
+tier: main
 year: 2024-2025
 status: Completed, team projects
 summary: Two MSc team projects in marine control, a BlueROV that tracks a buoy by vision and a dynamic-positioning controller for a vessel.
@@ -16,6 +16,8 @@ contribution:
   - PID and LQG dynamic-positioning controllers with wave and wind disturbance simulation.
 findings: []
 limitation: These were team projects at course scale. The dynamic-positioning work stayed in simulation.
+cover: ../../assets/projects/marine-robotics/cover.jpg
+coverAlt: "Illustration of an underwater ROV tracking an orange buoy below a supply vessel holding position."
 youtube: ""
 thumbnail: ../../assets/projects/marine-robotics/thumb.jpg
 thumbnailAlt: Underwater camera view of a red buoy in a test tank, with the tracked point marked.

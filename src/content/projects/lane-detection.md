@@ -2,7 +2,7 @@
 title: Lane-following robot car
 slug: lane-detection
 order: 9
-tier: compact
+tier: main
 year: 2020-2021
 status: Completed, published at IEEE ICIT 2022
 summary: A small robot car that follows a road with one camera on a Raspberry Pi and watches for obstacles with ultrasonic sensors.

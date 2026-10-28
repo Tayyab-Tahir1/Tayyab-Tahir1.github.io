@@ -2,7 +2,7 @@
 title: Dynamic positioning of a supply vessel
 slug: dynamic-positioning
 order: 7
-tier: compact
+tier: main
 year: "2024"
 status: Completed, team project
 summary: A dynamic-positioning system for an offshore supply vessel in MATLAB and Simulink, holding position and following a path under wind, waves and current.

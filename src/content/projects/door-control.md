@@ -2,7 +2,7 @@
 title: "Automated door control: face-mask and temperature check"
 slug: door-control
 order: 8
-tier: compact
+tier: main
 year: 2021-2022
 status: Built and installed
 summary: A door that opens only for a person wearing a face mask with a normal body temperature, built for the entrance of an industrial production hall.

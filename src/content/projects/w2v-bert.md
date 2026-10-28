@@ -2,7 +2,7 @@
 title: Evaluating the w2v-BERT 2.0 speech tokenizer
 slug: w2v-bert
 order: 10
-tier: compact
+tier: main
 year: "2024"
 status: Completed, team project
 summary: Testing whether features from the w2v-BERT 2.0 encoder make good discrete tokens for a speech language model.

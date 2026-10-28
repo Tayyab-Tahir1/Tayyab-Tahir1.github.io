@@ -44,13 +44,20 @@ const profileSchema = z.object({
     z.object({
       degree: z.string(),
       institution: z.string(),
+      logo: z.string().optional(),
       place: z.string(),
       dates: z.string(),
       detail: z.string().optional(),
     }),
   ),
   experience: z.array(
-    z.object({ role: z.string(), org: z.string(), place: z.string(), dates: z.string() }),
+    z.object({
+      role: z.string(),
+      org: z.string(),
+      logo: z.string().optional(),
+      place: z.string(),
+      dates: z.string(),
+    }),
   ),
   certifications: z.array(
     z.object({
@@ -104,11 +111,35 @@ export const publications = load('publications.yaml', publicationsRaw, publicati
 const badgeFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/badges/*', {
   eager: true,
 });
+const logoFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/logos/*', {
+  eager: true,
+});
+
+function findImage(
+  files: Record<string, { default: ImageMetadata }>,
+  folder: string,
+  fileName: string,
+): ImageMetadata {
+  const match = Object.entries(files).find(([path]) => path.endsWith(`/${fileName}`));
+  if (!match) throw new Error(`Image not found in src/assets/${folder}/: ${fileName}`);
+  return match[1].default;
+}
 
 export function badgeImage(fileName: string): ImageMetadata {
-  const match = Object.entries(badgeFiles).find(([path]) => path.endsWith(`/${fileName}`));
-  if (!match) throw new Error(`Badge image not found in src/assets/badges/: ${fileName}`);
-  return match[1].default;
+  return findImage(badgeFiles, 'badges', fileName);
+}
+
+/**
+ * Institution or employer logo (transparent background) for education and experience entries.
+ * A sibling file named `<name>-dark.<ext>` is used on the dark theme when it exists.
+ */
+export function logoImages(fileName: string): { light: ImageMetadata; dark?: ImageMetadata } {
+  const light = findImage(logoFiles, 'logos', fileName);
+  const stem = fileName.replace(/\.[^.]+$/, '');
+  const darkMatch = Object.entries(logoFiles).find(([path]) =>
+    new RegExp(`/${stem}-dark\\.[a-z]+$`).test(path),
+  );
+  return { light, dark: darkMatch?.[1].default };
 }
 
 /** Split an author string so the site owner's name can be bolded. */

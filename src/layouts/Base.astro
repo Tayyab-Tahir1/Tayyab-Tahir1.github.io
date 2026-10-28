@@ -4,6 +4,7 @@ import '@fontsource-variable/public-sans/index.css';
 import '../styles/global.css';
 import { getImage } from 'astro:assets';
 import { profile } from '../lib/data';
+import Icon from '../components/Icon.astro';
 import ogSource from '../assets/hero/og-microgrid.png';
 
 interface Props {
@@ -23,6 +24,14 @@ const nav = [
   { key: 'publications', label: 'Publications', href: '/publications/' },
   { key: 'cv', label: 'CV', href: '/cv/' },
   { key: 'about', label: 'About', href: '/about/' },
+] as const;
+
+const contacts = [
+  { icon: 'email', label: profile.email, href: `mailto:${profile.email}` },
+  { icon: 'scholar', label: 'Google Scholar', href: profile.links.scholar },
+  { icon: 'github', label: 'GitHub', href: profile.links.github },
+  { icon: 'orcid', label: 'ORCID', href: profile.links.orcid },
+  { icon: 'linkedin', label: 'LinkedIn', href: profile.links.linkedin },
 ] as const;
 ---
 
@@ -90,11 +99,16 @@ const nav = [
           <p class="muted">{profile.role}, {profile.affiliation}. {profile.location}.</p>
         </div>
         <ul class="footer-links" aria-label="Contact and profiles">
-          <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
-          <li><a href={profile.links.scholar}>Google Scholar</a></li>
-          <li><a href={profile.links.github}>GitHub</a></li>
-          <li><a href={profile.links.orcid}>ORCID</a></li>
-          <li><a href={profile.links.linkedin}>LinkedIn</a></li>
+          {
+            contacts.map((c) => (
+              <li class={c.icon === 'email' ? 'is-email' : undefined}>
+                <a href={c.href}>
+                  <Icon name={c.icon} />
+                  <span>{c.label}</span>
+                </a>
+              </li>
+            ))
+          }
         </ul>
         <p class="muted footer-updated">Last updated {profile.updated}.</p>
       </div>
@@ -223,12 +237,35 @@ const nav = [
         padding: 0;
         display: flex;
         flex-wrap: wrap;
-        gap: 0 var(--space-4);
+        justify-content: flex-end;
+        gap: var(--space-2);
       }
       .footer-links a {
         display: inline-flex;
         align-items: center;
+        gap: 0.5rem;
         min-height: 44px;
+        padding: 0 0.85rem;
+        color: var(--text);
+        text-decoration: none;
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        transition: border-color 140ms var(--ease), color 140ms var(--ease);
+      }
+      .footer-links a:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .footer-links .is-email {
+        flex-basis: 100%;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .footer-links .is-email a {
+        font-weight: 600;
+      }
+      .footer-links :global(.icon) {
+        flex: none;
       }
       .footer-updated {
         grid-column: 1 / -1;
@@ -250,6 +287,10 @@ const nav = [
         }
         .footer-inner {
           grid-template-columns: 1fr;
+        }
+        .footer-links,
+        .footer-links .is-email {
+          justify-content: flex-start;
         }
       }
     </style>

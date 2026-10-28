@@ -15,6 +15,7 @@ Most updates are edits to one text file. You only touch code to change the desig
 | Project images (figures, thumbnails, video posters) | `src/assets/projects/<slug>/` |
 | Hero images and the research map | `src/assets/hero/` |
 | Certification badge images | `src/assets/badges/` |
+| University and employer logos (transparent; optional `<name>-dark` variant for the dark theme) | `src/assets/logos/` |
 | CV and publication list PDFs | `public/cv/` |
 | Colours, fonts, spacing | `src/styles/global.css` (tokens at the top) |
 | Page templates | `src/pages/` and `src/layouts/Base.astro` |

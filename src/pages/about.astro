@@ -1,6 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import OrgLogo from '../components/OrgLogo.astro';
 import { profile, badgeImage } from '../lib/data';
 ---
 
@@ -27,12 +29,15 @@ import { profile, badgeImage } from '../lib/data';
           <ul class="entries">
             {
               profile.education.map((e) => (
-                <li>
-                  <p class="entry-title">{e.degree}</p>
-                  <p class="muted">
-                    {e.institution}, {e.place}. <span class="tnum">{e.dates}</span>.
-                  </p>
-                  {e.detail && <p class="muted">{e.detail}</p>}
+                <li class="edu">
+                  <OrgLogo logo={e.logo} />
+                  <div>
+                    <p class="entry-title">{e.degree}</p>
+                    <p class="muted">
+                      {e.institution}, {e.place}. <span class="tnum">{e.dates}</span>.
+                    </p>
+                    {e.detail && <p class="muted">{e.detail}</p>}
+                  </div>
                 </li>
               ))
             }
@@ -70,14 +75,16 @@ import { profile, badgeImage } from '../lib/data';
 
       <aside class="contact" aria-labelledby="contact-title">
         <h2 id="contact-title">Contact</h2>
-        <p><a class="email" href={`mailto:${profile.email}`}>{profile.email}</a></p>
+        <p>
+          <a class="email" href={`mailto:${profile.email}`}><Icon name="email" />{profile.email}</a>
+        </p>
         <p class="muted">{profile.location}</p>
         <p class="muted">References available on request.</p>
         <ul class="contact-links">
-          <li><a href={profile.links.scholar}>Google Scholar</a></li>
-          <li><a href={profile.links.orcid}>ORCID</a></li>
-          <li><a href={profile.links.github}>GitHub</a></li>
-          <li><a href={profile.links.linkedin}>LinkedIn</a></li>
+          <li><a href={profile.links.scholar}><Icon name="scholar" />Google Scholar</a></li>
+          <li><a href={profile.links.orcid}><Icon name="orcid" />ORCID</a></li>
+          <li><a href={profile.links.github}><Icon name="github" />GitHub</a></li>
+          <li><a href={profile.links.linkedin}><Icon name="linkedin" />LinkedIn</a></li>
         </ul>
       </aside>
     </div>
@@ -136,6 +143,12 @@ import { profile, badgeImage } from '../lib/data';
   .entry-title {
     font-weight: 600;
   }
+  .entries li.edu {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: start;
+  }
   .certs li {
     display: grid;
     grid-template-columns: 48px minmax(0, 1fr);
@@ -167,6 +180,17 @@ import { profile, badgeImage } from '../lib/data';
   .email {
     font-weight: 600;
     word-break: break-all;
+  }
+  .email,
+  .contact-links a {
+    gap: 0.5rem;
+  }
+  .email {
+    display: inline-flex;
+    align-items: center;
+  }
+  .contact :global(.icon) {
+    flex: none;
   }
   .contact-links {
     list-style: none;

@@ -56,16 +56,19 @@ links:
 education:
   - degree: MSc Marine Robotics (Erasmus Mundus MIR), Electrical, Computer and Control Engineering
     institution: Norwegian University of Science and Technology (NTNU)
+    logo: ntnu.svg
     place: Trondheim, Norway
     dates: 2024-2025
     detail: "Grade A. Thesis: Modeling and Control of Smart Integrated Port Energy Systems: A Data-Driven Approach."
   - degree: MSc Engineering of Complex Systems (Erasmus Mundus MIR)
     institution: Université de Toulon
+    logo: toulon.png
     place: La Garde, France
     dates: 2023-2024
     detail: Grade 15.2/20. Erasmus Mundus Joint Master in Marine and Maritime Intelligent Robotics, full scholarship.
   - degree: BS Electrical Engineering
     institution: University of Management and Technology (UMT)
+    logo: umt.png
     place: Lahore, Pakistan
     dates: 2016-2020
     detail: GPA 3.96/4.00, Gold Medalist.
@@ -73,22 +76,27 @@ education:
 experience:
   - role: Early Stage Researcher, Horizon Europe project
     org: TalTech, Centre for Biorobotics
+    logo: taltech.png
     place: Tallinn, Estonia
     dates: Dec 2025 to present
   - role: MSc thesis researcher, smart port energy systems
     org: NTNU, Department of Marine Technology
+    logo: ntnu.svg
     place: Trondheim, Norway
     dates: Jan-Jun 2025
   - role: Teaching assistant, Marine Electric and Hybrid Power and Propulsion Systems
     org: NTNU, Department of Marine Technology
+    logo: ntnu.svg
     place: Trondheim, Norway
     dates: Jan-Jun 2025
   - role: AI engineering intern
     org: EXAIL (formerly ECA Group)
+    logo: exail.png
     place: La Garde, France
     dates: Jun-Aug 2024
   - role: Lab engineer
     org: UMT, Smart Power Systems Lab
+    logo: umt.png
     place: Sialkot, Pakistan
     dates: 2021-2023
   - role: Solar PV design and commissioning engineer
@@ -96,7 +104,7 @@ experience:
     place: Sialkot, Pakistan
     dates: 2020-2021
 
-# badge: file name inside src/assets/badges/
+# badge: file name inside src/assets/badges/. logo (education, experience): file name inside src/assets/logos/
 certifications:
   - name: NASA Open Science 101
     issuer: NASA Science Mission Directorate

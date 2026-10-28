@@ -286,8 +286,8 @@ const m = profile.metrics;
   .hero h1 {
     font-size: clamp(2.4rem, 1.7rem + 2.4vw, 3.6rem);
     font-weight: 450;
-    letter-spacing: -0.025em;
-    line-height: 1.02;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
     margin-bottom: var(--space-4);
   }
   .tagline {
@@ -482,7 +482,7 @@ const m = profile.metrics;
 
   .map-grid {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    grid-template-columns: minmax(17rem, 4fr) minmax(0, 8fr);
     gap: var(--space-5);
     align-items: start;
   }
@@ -563,6 +563,38 @@ const m = profile.metrics;
     .recent {
       grid-template-columns: 1fr;
       gap: var(--space-4);
+    }
+  }
+  @media (min-width: 48rem) and (max-width: 63.99rem) {
+    /* Tablets: drop the status column so the result text keeps a readable measure. */
+    .row {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--space-1) var(--space-4);
+    }
+    .row-thumb {
+      grid-row: 1 / span 2;
+    }
+    .row-status {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: left;
+      padding-top: 0;
+    }
+    .row-body {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .compact-row {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--space-1) var(--space-4);
+    }
+    .compact-title {
+      grid-row: 1 / span 2;
+    }
+    .compact-row .row-status {
+      grid-column: 2;
+      text-align: left;
+      padding-top: 0;
     }
   }
   @media (max-width: 39.99rem) {

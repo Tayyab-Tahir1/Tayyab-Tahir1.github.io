@@ -23,7 +23,7 @@
   --type-project: clamp(1.25rem, 1.12rem + 0.6vw, 1.625rem);
   --type-lead: clamp(1.125rem, 1rem + 0.55vw, 1.4rem);
   --type-body: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
-  --type-meta: 0.9rem;
+  --type-meta: clamp(0.9rem, 0.87rem + 0.1vw, 0.9375rem);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -31,10 +31,10 @@
   --space-4: 1.5rem;
   --space-5: 2rem;
   --space-6: 3rem;
-  --space-section: clamp(3rem, 2rem + 4vw, 5rem);
+  --space-section: clamp(2.75rem, 1.6rem + 4.2vw, 5.5rem);
 
   --page-max: 75rem;
-  --gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
   --radius: 4px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
@@ -113,7 +113,7 @@ h2,
 h3 {
   font-family: var(--font-display);
   font-weight: 500;
-  line-height: 1.12;
+  line-height: 1.14;
   margin: 0;
   text-wrap: balance;
 }
@@ -138,7 +138,8 @@ h3 {
 
 p {
   margin: 0 0 var(--space-3);
-  max-width: 64ch;
+  max-width: 62ch;
+  text-wrap: pretty;
 }
 
 a {
@@ -262,7 +263,7 @@ ul {
 .section-head {
   border-top: 2px solid var(--rule-strong);
   padding-top: var(--space-3);
-  margin-bottom: var(--space-5);
+  margin-bottom: clamp(var(--space-4), 1rem + 1.2vw, var(--space-5));
 }
 
 /* Page header shared by the inner pages. */

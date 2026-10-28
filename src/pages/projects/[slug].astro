@@ -145,7 +145,14 @@ const hasVideo = Boolean(d.poster);
             <section aria-labelledby="m-title" class="block">
               <h2 id="m-title">Method</h2>
               {methodNumbered.map((f) => (
-                <Figure src={f.src} caption={f.caption} alt={f.alt} number={f.number} plate={f.plate} />
+                <Figure
+                  src={f.src}
+                  caption={f.caption}
+                  alt={f.alt}
+                  number={f.number}
+                  plate={f.plate}
+                  class={f.size === 'narrow' ? 'fig-narrow' : undefined}
+                />
               ))}
               {hasBody && (
                 <div class="prose">
@@ -168,7 +175,14 @@ const hasVideo = Boolean(d.poster);
                 </ul>
               )}
               {resultNumbered.map((f) => (
-                <Figure src={f.src} caption={f.caption} alt={f.alt} number={f.number} plate={f.plate} />
+                <Figure
+                  src={f.src}
+                  caption={f.caption}
+                  alt={f.alt}
+                  number={f.number}
+                  plate={f.plate}
+                  class={f.size === 'narrow' ? 'fig-narrow' : undefined}
+                />
               ))}
             </section>
           )

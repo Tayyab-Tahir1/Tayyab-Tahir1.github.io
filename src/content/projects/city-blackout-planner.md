@@ -1,7 +1,7 @@
 ---
 title: City blackout resilience planner
 slug: city-blackout-planner
-order: 7
+order: 11
 tier: also
 year: "2026"
 status: Hackathon prototype

@@ -39,6 +39,8 @@ const projects = defineCollection({
             alt: z.string().optional(),
             kind: z.enum(['method', 'result']).default('result'),
             plate: z.boolean().default(true),
+            // narrow: small source images (e.g. a low-resolution photo) shown near their native size.
+            size: z.enum(['full', 'narrow']).default('full'),
           }),
         )
         .default([]),

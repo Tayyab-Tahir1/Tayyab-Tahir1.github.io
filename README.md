@@ -58,7 +58,7 @@ build before pushing.
    | `youtube` | Empty `""` until the video is online (see below) |
    | `thumbnail`, `thumbnailAlt` | Image for the home-page row and its description for screen readers |
    | `poster` | Video poster, shown right under the summary. Leave it out if the project has no video |
-   | `figures` | List of `src`, `caption`, `kind` (`method` or `result`) and optional `plate: false` for screenshots |
+   | `figures` | List of `src`, `caption`, `kind` (`method` or `result`), optional `plate: false` for screenshots and `size: narrow` for small images (shown at most 40rem wide) |
    | `links` | `code`, `paper`, and `other` (a list of `label` and `url`) |
 
    Image paths are relative to the Markdown file, so they start with `../../assets/projects/...`.

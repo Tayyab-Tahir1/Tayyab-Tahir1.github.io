@@ -35,6 +35,15 @@ figures:
   - src: ../../assets/projects/port-energy/port-dispatch-week.png
     kind: result
     caption: Port microgrid dispatch over one summer week under the MPC-LSTM controller, Oslo simulation.
+  - src: ../../assets/projects/port-energy/port-co2.png
+    kind: result
+    caption: "CO2 emissions. (a) Monthly CO2 in Oslo for DQN, MPC and MPC-LSTM: lowest from May to August, when solar covers the load. (b) The same Oslo-trained MPC-LSTM policy at four ports: annual CO2 follows the carbon intensity of each grid."
+  - src: ../../assets/projects/port-energy/port-locations.png
+    kind: result
+    caption: Monthly electricity bills when the Oslo-trained MPC-LSTM policy runs unchanged at three other ports, with Oslo dotted for reference.
+  - src: ../../assets/projects/port-energy/port-islanded.png
+    kind: result
+    caption: "Islanded mode: PV, battery and fuel cell meet every month's load, but the winter months rely on bought hydrogen."
 links:
   code: https://github.com/Tayyab-Tahir1/Modeling-and-Control-of-Smart-Integrated-Port-Energy-Systems-A-Data-Driven-Approach
 ---

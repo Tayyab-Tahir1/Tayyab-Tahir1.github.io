@@ -51,20 +51,22 @@ const journalCount = publications.journal.length;
           <p>{publications.contributionNote}</p>
         </section>
 
-        <section aria-labelledby="p-title">
-          <h2 id="p-title">Manuscript in preparation</h2>
-          <ul class="papers plain">
-            {
-              publications.inPreparation.map((item) => (
-                <li class="prep">
-                  <p class="prep-title">{item.title}</p>
-                  <p class="muted small">{item.note}</p>
-                  {item.project && <p class="small"><a href={`/projects/${item.project}/`}>Project page</a></p>}
-                </li>
-              ))
-            }
-          </ul>
-        </section>
+        {publications.inPreparation.length > 0 && (
+          <section aria-labelledby="p-title">
+            <h2 id="p-title">Manuscript in preparation</h2>
+            <ul class="papers plain">
+              {
+                publications.inPreparation.map((item) => (
+                  <li class="prep">
+                    <p class="prep-title">{item.title}</p>
+                    <p class="muted small">{item.note}</p>
+                    {item.project && <p class="small"><a href={`/projects/${item.project}/`}>Project page</a></p>}
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        )}
 
         <section aria-labelledby="t-title">
           <h2 id="t-title">MSc thesis</h2>

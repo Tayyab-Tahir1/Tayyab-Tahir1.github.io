@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import { logoImages } from '../lib/data';
+
+// Logo of a university or employer on a transparent background. Logos that are too dark for the dark
+// theme have a light `<name>-dark` sibling, swapped in by theme. Without a logo the slot stays empty
+// to keep the entries aligned. Decorative: the entry text names the org.
+interface Props {
+  logo?: string;
+}
+
+const { logo } = Astro.props;
+const images = logo ? logoImages(logo) : undefined;
+const WIDTH = 160;
+const heightFor = (img: { width: number; height: number }) => Math.round((WIDTH * img.height) / img.width);
+---
+
+<span class:list={['org-logo', { 'has-dark': images?.dark }]} aria-hidden="true">
+  {
+    images && (
+      <Image src={images.light} alt="" width={WIDTH} height={heightFor(images.light)} class="logo-light" />
+    )
+  }
+  {
+    images?.dark && (
+      <Image src={images.dark} alt="" width={WIDTH} height={heightFor(images.dark)} class="logo-dark" />
+    )
+  }
+</span>
+
+<style>
+  .org-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 3rem;
+    flex: none;
+  }
+  .org-logo :global(img) {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+  .org-logo :global(.logo-dark) {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .has-dark :global(.logo-light) {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .has-dark :global(.logo-dark) {
+    display: block;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .has-dark :global(.logo-light) {
+      display: none;
+    }
+    :global(:root:not([data-theme='light'])) .has-dark :global(.logo-dark) {
+      display: block;
+    }
+  }
+</style>

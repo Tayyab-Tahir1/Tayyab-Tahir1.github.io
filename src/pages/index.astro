@@ -1,0 +1,643 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Figure from '../components/Figure.astro';
+import { profile, publications, splitAuthors } from '../lib/data';
+import { getProjects } from '../lib/projects';
+import { inlineMarkup } from '../lib/format';
+import heroImage from '../assets/hero/hero-microgrid-exploded.png';
+import researchMap from '../assets/hero/research-map.png';
+
+const projects = await getProjects();
+const main = projects.filter((p) => p.data.tier === 'main');
+const compact = projects.filter((p) => p.data.tier === 'compact');
+const others = projects.filter((p) => p.data.tier === 'also');
+const recent = publications.journal.slice(0, 3);
+const m = profile.metrics;
+---
+
+<Base current="work">
+  <section class="hero wrap" aria-labelledby="hero-name">
+    <div class="hero-text">
+      <h1 id="hero-name">{profile.name}</h1>
+      <p class="tagline">{profile.tagline}</p>
+      <p class="question">{profile.researchQuestion}</p>
+      <p class="role">
+        {profile.role}, <strong>{profile.affiliation}</strong> ({profile.affiliationNote}), {profile.location}.
+        <span class="evidence tnum">
+          {m.papers} peer-reviewed papers, {m.citations} citations, h-index {m.hIndex} (<a href={profile.links.scholar}>Google Scholar, {m.checkedShort}</a>).
+        </span>
+      </p>
+      <div class="link-row">
+        <a class="btn btn-primary" href={profile.links.cv}>CV (PDF)</a>
+        <a href="/publications/">Publications</a>
+        <a href={profile.links.scholar}>Google Scholar</a>
+        <a href={profile.links.github}>GitHub</a>
+      </div>
+    </div>
+    <figure class="hero-figure">
+      <div class="hero-plate" data-hero3d>
+        <Image
+          src={heroImage}
+          alt="Exploded 3-D view of a multi-energy microgrid: grid connection with substation and pylon, EV charging with vehicle-to-grid, hydrogen electrolyser, tank and fuel cell, battery storage and solar PV, with a reinforcement-learning agent layer sending control actions to each."
+          widths={[400, 600, 800, 1200]}
+          sizes="(min-width: 64rem) 24rem, (min-width: 40rem) 22rem, 80vw"
+          format="webp"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </figure>
+  </section>
+
+  <section id="work" class="section wrap" aria-labelledby="work-title">
+    <div class="section-head">
+      <h2 id="work-title">Selected work</h2>
+    </div>
+    <ol class="rows">
+      {
+        main.map((p) => (
+          <li class="row">
+            <div class="row-thumb">
+              {(p.data.cover ?? p.data.thumbnail) && (
+                <Image
+                  src={(p.data.cover ?? p.data.thumbnail)!}
+                  alt={p.data.cover ? p.data.coverAlt : p.data.thumbnailAlt}
+                  widths={[320, 480, 640]}
+                  sizes="(min-width: 48rem) 15rem, 10rem"
+                  format="webp"
+                  loading="lazy"
+                />
+              )}
+            </div>
+            <div class="row-body">
+              <h3>
+                <a class="row-link" href={`/projects/${p.id}/`}>
+                  {p.data.title}
+                </a>
+              </h3>
+              <p class="row-result" set:html={inlineMarkup(p.data.result)} />
+              <p class="row-meta muted">
+                {p.data.year}. {p.data.tools.slice(0, 4).join(', ')}
+              </p>
+            </div>
+            <p class="row-status">{p.data.status}</p>
+          </li>
+        ))
+      }
+    </ol>
+    {
+      compact.length > 0 && (
+        <ul class="compact" aria-label="More projects">
+          {compact.map((p) => (
+            <li class="compact-row">
+              <h3 class="compact-title">
+                <a class="row-link" href={`/projects/${p.id}/`}>
+                  {p.data.title}
+                </a>
+              </h3>
+              <p class="compact-result" set:html={inlineMarkup(p.data.result)} />
+              <p class="row-status">{p.data.status}</p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      others.length > 0 && (
+        <p class="also">
+          Also:{' '}
+          {others.map((p, i) => (
+            <>
+              <a href={`/projects/${p.id}/`}>{p.data.title}</a> ({p.data.status.toLowerCase()}, {p.data.year})
+              {i < others.length - 1 ? '; ' : '.'}
+            </>
+          ))}
+        </p>
+      )
+    }
+  </section>
+
+  <section class="section wrap" aria-labelledby="map-title">
+    <div class="section-head">
+      <h2 id="map-title">How the work fits together</h2>
+    </div>
+    <div class="map-grid">
+      <p class="map-text">
+        The methods are shared across both application areas: deep RL and MPC for decisions, sequence models for
+        forecasting and estimation. Both also need uncertainty estimates: prediction intervals, and checks on how
+        often the true value falls inside them.
+      </p>
+      <ul class="map-html" aria-label="Research themes">
+        <li>
+          <h3>Methods</h3>
+          <p>Deep RL (DQN, PPO, SAC), model predictive control, imitation learning, forecasting and sequence models.</p>
+        </li>
+        <li>
+          <h3>Application areas</h3>
+          <p>
+            <strong>Energy systems:</strong> microgrids, V2G, virtual power plants, home energy management, port
+            hydrogen systems.
+          </p>
+          <p>
+            <strong>Field robotics:</strong> traction control (in progress), marine robotics.
+          </p>
+        </li>
+        <li>
+          <h3>Uncertainty and validation</h3>
+          <p>Probabilistic forecasts, prediction intervals, hardware-in-the-loop testing.</p>
+        </li>
+      </ul>
+      <Figure
+        class="map-figure"
+        src={researchMap}
+        caption="Research themes: learning-based control for energy systems and field robotics. Traction control is in progress."
+        alt="Diagram of research themes. Top: reinforcement learning and predictive control (deep RL, MPC, imitation learning, forecasting). Middle: energy systems (microgrids, V2G, virtual power plants, home energy management, port hydrogen systems) and field robotics (traction control in progress, marine robotics). Bottom: uncertainty and validation (probabilistic forecasts, prediction intervals, hardware-in-the-loop testing)."
+        sizes="(min-width: 64rem) 50rem, 100vw"
+      />
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="pubs-title">
+    <div class="section-head pubs-head">
+      <h2 id="pubs-title">Recent journal articles</h2>
+      <a href="/publications/">All {m.papers} papers</a>
+    </div>
+    <ul class="recent">
+      {
+        recent.map((paper) => (
+          <li>
+            <p class="recent-title">
+              <a href={`https://doi.org/${paper.doi}`}>{paper.title}</a>
+            </p>
+            <p class="muted recent-meta">
+              {splitAuthors(paper.authors).map((a, i, arr) => (
+                <>
+                  {a.isMe ? <strong class="me">{a.text}</strong> : a.text}
+                  {i < arr.length - 1 ? ', ' : ''}
+                </>
+              ))}
+              . <em>{paper.venue}</em>, {paper.year}.
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<script>
+  // Progressive enhancement: the static figure stays unless the screen is wide, WebGL works and the
+  // visitor has not asked for reduced motion. three.js loads in its own chunk, only in that case.
+  type Hero = { dispose(): void };
+  const plate = document.querySelector<HTMLElement>('[data-hero3d]');
+  const wide = window.matchMedia('(min-width: 900px)');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function hasWebGL(): boolean {
+    try {
+      const probe = document.createElement('canvas');
+      const gl = probe.getContext('webgl2') ?? probe.getContext('webgl');
+      gl?.getExtension('WEBGL_lose_context')?.loseContext();
+      return Boolean(gl);
+    } catch {
+      return false;
+    }
+  }
+
+  let hero: Hero | null = null;
+  let loading = false;
+  const canAnimate = (): boolean => wide.matches && !reduced.matches;
+
+  async function mount(target: HTMLElement): Promise<void> {
+    if (hero || loading) return;
+    loading = true;
+    const canvas = document.createElement('canvas');
+    canvas.className = 'hero-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    const labels = document.createElement('div');
+    labels.className = 'hero-labels';
+    labels.setAttribute('aria-hidden', 'true');
+    target.append(canvas, labels);
+    try {
+      const { mountMicrogridHero } = await import('../scripts/microgrid-hero.js');
+      // The screen may have narrowed (or motion been reduced) while the chunk was loading.
+      if (!canAnimate()) {
+        canvas.remove();
+        labels.remove();
+        return;
+      }
+      hero = mountMicrogridHero(canvas, {
+        labelLayer: labels,
+        reducedMotion: false,
+        onFirstFrame: () => target.classList.add('is-live'),
+      });
+    } catch (error) {
+      console.error('Animated hero unavailable; keeping the static figure.', error);
+      canvas.remove();
+      labels.remove();
+    } finally {
+      loading = false;
+    }
+  }
+
+  function unmount(target: HTMLElement): void {
+    target.classList.remove('is-live');
+    hero?.dispose();
+    hero = null;
+    target.querySelectorAll('.hero-canvas, .hero-labels').forEach((node) => node.remove());
+  }
+
+  function update(): void {
+    if (!plate) return;
+    if (canAnimate() && hasWebGL()) {
+      void mount(plate);
+    } else {
+      unmount(plate);
+    }
+  }
+
+  if (plate) {
+    const start = () => update();
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(start, { timeout: 1200 });
+    } else {
+      setTimeout(start, 200);
+    }
+    wide.addEventListener('change', update);
+    reduced.addEventListener('change', update);
+  }
+</script>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-5) var(--space-6);
+    align-items: center;
+    padding-block: clamp(1.25rem, 0.5rem + 2vw, 2.25rem) 0;
+  }
+  #work {
+    padding-top: clamp(2rem, 1rem + 2vw, 2.75rem);
+  }
+  #work .section-head {
+    margin-bottom: var(--space-4);
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 1.7rem + 2.4vw, 3.6rem);
+    font-weight: 450;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    margin-bottom: var(--space-4);
+  }
+  .tagline {
+    font-family: var(--font-display);
+    font-size: var(--type-lead);
+    line-height: 1.32;
+    max-width: 30ch;
+    margin-bottom: var(--space-3);
+  }
+  .question {
+    max-width: 52ch;
+    text-wrap: pretty;
+    margin-bottom: var(--space-3);
+  }
+  .role {
+    color: var(--muted);
+    max-width: 46ch;
+    margin-bottom: var(--space-4);
+  }
+  .role strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .evidence {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: var(--type-meta);
+  }
+  .hero-figure {
+    justify-self: end;
+    width: min(100%, 24rem);
+  }
+  /* The plate stays light in both themes: the figure is drawn in material colours on warm paper. */
+  .hero-plate {
+    position: relative;
+    overflow: hidden;
+    background: #f5f4f0;
+    border: 1px solid var(--hero-edge);
+    border-radius: var(--radius);
+  }
+  .hero-plate :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: opacity 600ms var(--ease);
+  }
+  .hero-plate :global(.hero-canvas),
+  .hero-plate :global(.hero-labels) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 600ms var(--ease);
+    pointer-events: none;
+  }
+  .hero-plate:global(.is-live) :global(.hero-canvas),
+  .hero-plate:global(.is-live) :global(.hero-labels) {
+    opacity: 1;
+  }
+  .hero-plate:global(.is-live) :global(img) {
+    opacity: 0;
+  }
+  .hero-plate :global(.mg-label) {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    line-height: 1;
+    color: #202b29;
+  }
+  .hero-plate :global(.mg-tick) {
+    height: 1px;
+    background: #202b29;
+    opacity: 0.55;
+  }
+
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr) 9rem;
+    gap: var(--space-4);
+    align-items: start;
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--rule);
+  }
+  .row:first-child {
+    padding-top: 0;
+  }
+  .row-thumb {
+    aspect-ratio: 8 / 5;
+    background: var(--surface);
+    border: 1px solid var(--plate-edge);
+    overflow: hidden;
+  }
+  .row-thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 200ms var(--ease);
+  }
+  .row:hover .row-thumb :global(img) {
+    transform: scale(1.03);
+  }
+  .row h3 {
+    margin-bottom: var(--space-2);
+  }
+  .row-link {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .row-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .row-link:focus-visible {
+    outline: none;
+  }
+  .row:has(.row-link:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+  }
+  .row:hover .row-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+  .row-result {
+    margin-bottom: var(--space-2);
+  }
+  .row-result :global(strong) {
+    font-weight: 600;
+  }
+  .row-meta {
+    font-size: var(--type-meta);
+    margin: 0;
+  }
+  .row-status {
+    font-size: var(--type-meta);
+    color: var(--muted);
+    margin: 0;
+    padding-top: 0.3rem;
+    text-align: right;
+  }
+  .compact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .compact-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr) 9rem;
+    gap: var(--space-4);
+    align-items: baseline;
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .compact-title {
+    font-size: 1.05rem;
+    margin: 0;
+  }
+  .compact-row:hover .row-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+  .compact-row:has(.row-link:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+  }
+  .compact-result {
+    font-size: var(--type-meta);
+    margin: 0;
+  }
+  .compact-result :global(strong) {
+    font-weight: 600;
+  }
+  .also {
+    margin-top: var(--space-4);
+    font-size: var(--type-meta);
+    color: var(--muted);
+    max-width: none;
+  }
+
+  .map-grid {
+    display: grid;
+    grid-template-columns: minmax(17rem, 4fr) minmax(0, 8fr);
+    gap: var(--space-5);
+    align-items: start;
+  }
+  .map-text {
+    color: var(--muted);
+  }
+  .map-html {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .map-html li {
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+  .map-html h3 {
+    font-size: 1.05rem;
+    margin-bottom: var(--space-2);
+  }
+  .map-html p {
+    font-size: var(--type-meta);
+    margin-bottom: var(--space-2);
+  }
+  .map-html strong {
+    font-weight: 600;
+  }
+
+  .pubs-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .recent {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+  .recent-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 1.3;
+    margin-bottom: var(--space-2);
+  }
+  .recent-title a {
+    color: var(--text);
+    text-decoration-color: var(--rule);
+  }
+  .recent-title a:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+  .recent-meta {
+    font-size: var(--type-meta);
+    line-height: 1.5;
+  }
+  .me {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 63.99rem) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+    .hero-figure {
+      justify-self: start;
+      width: min(100%, 22rem);
+    }
+    .map-grid {
+      grid-template-columns: 1fr;
+    }
+    .recent {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+  @media (min-width: 48rem) and (max-width: 63.99rem) {
+    /* Tablets: drop the status column so the result text keeps a readable measure. */
+    .row {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--space-1) var(--space-4);
+    }
+    .row-thumb {
+      grid-row: 1 / span 2;
+    }
+    .row-status {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: left;
+      padding-top: 0;
+    }
+    .row-body {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .compact-row {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--space-1) var(--space-4);
+    }
+    .compact-title {
+      grid-row: 1 / span 2;
+    }
+    .compact-row .row-status {
+      grid-column: 2;
+      text-align: left;
+      padding-top: 0;
+    }
+  }
+  @media (max-width: 39.99rem) {
+    /* On phones the project list matters more than the illustration. */
+    .hero-figure {
+      display: none;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    /* The diagram's labels are too small on phones: show the same content as text. */
+    .map-html {
+      display: block;
+    }
+    .map-grid :global(.map-figure) {
+      display: none;
+    }
+    .compact-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+    .compact-row .row-status {
+      grid-column: auto;
+      grid-row: auto;
+      align-self: start;
+      text-align: left;
+      padding-top: 0;
+    }
+    .row {
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      gap: var(--space-3);
+    }
+    .row-status {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: left;
+      padding-top: 0;
+      align-self: end;
+    }
+    .row-thumb {
+      grid-row: 1;
+    }
+    .row-body {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -19,8 +19,11 @@ findings:
   - "Fault ride-through, a dip to 0.2 pu for 150 ms at SCR 3: grid-following stays synchronised, and its power recovers to within 5% in 60 ms after the fault clears. The VSM slips a pole unless a supervisory swing hold is active; with the hold it recovers in 232 ms."
   - "Grid frequency step of −0.2 Hz at SCR 2.5: the VSM delivers 0.2 pu of extra power and reaches 90% of it in 65 ms (t90). Grid-following with an added frequency droop takes 377 ms, and plain grid-following gives no response."
 limitation: This is an average model, so switching harmonics are not represented. The grid is a stiff Thevenin source with imposed frequency, so the study covers weak grids but not a low-inertia grid. There is no external validation against PSCAD; the cross-checks are internal, such as eigenvalues against time-domain simulation.
-thumbnail: ../../assets/projects/gfm-gfl-weak-grid/thumb.png
-thumbnailAlt: Stability map over the short-circuit ratio for three grid-following PLL bandwidths and the grid-forming VSM.
+cover: ../../assets/projects/gfm-gfl-weak-grid/cover.jpg
+coverAlt: "Illustration of a solar farm and battery storage feeding grid-following and grid-forming converters and a step-up transformer, connected by a long line to a distant substation."
+coverCaption: "Illustration of the setting: converter-based plants on a long line into a weak grid. The study itself is a single-converter model on a Thevenin grid."
+thumbnail: ../../assets/projects/gfm-gfl-weak-grid/thumb.jpg
+thumbnailAlt: Illustration of a solar and battery plant with grid-following and grid-forming converters connected to a distant weak grid.
 figures:
   - src: ../../assets/projects/gfm-gfl-weak-grid/gfm-gfl-system.png
     kind: method
